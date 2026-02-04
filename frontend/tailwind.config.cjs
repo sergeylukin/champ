@@ -29,14 +29,16 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#618ca1",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
-        bluelight: "#c2c9d5",
+        // TODO: revisit
+        // duplicate of primary, didn't find a way to reuse
+        bluelight: "#618ca1",
         bluedark: "#8597b0",
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
