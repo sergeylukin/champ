@@ -1,0 +1,8 @@
+---
+import HeroLayout from '@/layouts/hero.astro';
+import { Onboarding } from "@/components/onboarding"
+---
+
+<HeroLayout animation={false} withIntro={false}>
+  <Onboarding client:only="react" />
+</HeroLayout>

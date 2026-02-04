@@ -1,0 +1,18 @@
+---
+import HeroLayout from '@/layouts/hero.astro';
+import { AuthForm } from "@/components/auth"
+---
+
+<HeroLayout animation={true} withIntro={true}>
+	<div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[80%] md:w-[50%]">
+		<div class="Login flex flex-col space-y-2 text-center bg-background px-1 py-3
+		rounded-xs border-bluedark border-4 mt-[30%]">
+			<AuthForm client:load />
+		</div>
+	</div>
+</HeroLayout>
+
+<style>
+	.Login {
+	}
+</style>

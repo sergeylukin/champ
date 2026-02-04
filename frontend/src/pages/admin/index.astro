@@ -1,0 +1,25 @@
+---
+import Layout from '@/layouts/layout.astro';
+import { AdminAuth } from "@/components/admin/auth"
+---
+
+<Layout>
+	<section>
+			<div class="relative h-screen flex-col p-10 justify-center dark:border-r flex">
+				<div class="lg:p-8">
+					<div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+						<div class="flex flex-col space-y-2 text-center bg-background p-8
+							rounded-md">
+							<h1 class="text-2xl font-semibold tracking-tight">
+								{"כניסה למנהלים"}
+							</h1>
+							<p class="text-sm text-muted-foreground">
+								{"נא להזין שם משתמש וסיסמה"}
+							</p>
+							<AdminAuth client:load />
+						</div>
+					</div>
+				</div>
+			</div>
+	</section>
+</Layout>

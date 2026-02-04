@@ -1,0 +1,80 @@
+---
+import Layout from '@/layouts/layout.astro';
+import { IntroSlide } from '@/components/introslide';
+
+const { animation, withIntro } = Astro.props;
+---
+
+<Layout>
+<section>
+		{withIntro && <IntroSlide client:load />}
+		<div>
+			<div class="Main">
+				<div class="Main-bg absolute h-full w-full grayscale
+					bg-login bg-no-repeat bg-center bg-origin-border bg-cover" />
+				<div class="Main-bottom absolute w-full" />
+			</div>
+			<div class="container relative h-screen flex-col items-center
+			justify-center grid lg:max-w-none grid-cols-1 lg:px-0">
+				<div class="relative h-screen flex-col md:p-10 justify-center dark:border-r flex">
+					<div class="lg:p-8">
+						<slot />
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	:global(.Intro) {
+		background-image: url(/intro.jpg);
+		background-size: cover;
+		background-position: center center;
+	}
+	:global(.Intro-title) {
+		position: absolute;
+		left: 0;
+		bottom: 10%;
+		background: white;
+		width: 100%;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+	}
+	.Intro-title p {
+
+	}
+	:global(.Intro-title::before),
+	:global(.Intro-title::after) {
+		position: absolute;
+		content: ' ';
+		width: 100%;
+		height: 2px;
+		background: white;
+		left: 0;
+	}
+	:global(.Intro-title::before) {
+		top: -8px;
+	}
+	:global(.Intro-title::after) {
+		bottom: -8px;
+	}
+	:global(.Main) {
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		top: 0; left: 0;
+		height: 100%; width: 100%;
+	}
+	:global(.Main-bg) {
+	  box-shadow: 0 0 12px 12px white inset;
+		height: 80vh;
+	}
+	:global(.Main-bottom) {
+		bottom: 0;
+		height: 20vh;
+		width: 100%;
+		background: white;
+	}
+</style>
