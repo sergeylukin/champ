@@ -17,7 +17,7 @@ export async function adminLoginWithPass(email: string, pass: string) {
 }
 
 export async function loginWithPass(mail: string, pass: string) {
-  const resp = await POCKET.collection("users").authWithPassword(
+  const resp = await POCKET.collection("champ_users").authWithPassword(
     normalizeEmail(mail),
     pass
   );
@@ -25,18 +25,19 @@ export async function loginWithPass(mail: string, pass: string) {
 }
 
 export async function fetchIntroSlideContents() {
-  const record = await POCKET.collection("pages").getList<User>(0, 1, {
+  const record = await POCKET.collection("champ_pages").getList<User>(0, 1, {
     filter: `name='intro'`,
   });
 
   return record.items.length > 0 ? record.items[0]?.body : null;
 }
 export async function updateIntroSlideContents(md) {
-  const record = await POCKET.collection("pages").getList<User>(0, 1, {
+  const record = await POCKET.collection("champ_pages").getList<User>(0, 1, {
     filter: `name='intro'`,
   });
   const item = record.items.length > 0 ? record.items[0] : null;
-  if (item) await POCKET.collection("pages").update(item?.id, { body: md });
+  if (item)
+    await POCKET.collection("champ_pages").update(item?.id, { body: md });
 }
 
 export async function registerWithPass(
@@ -46,7 +47,7 @@ export async function registerWithPass(
   lastname: string
 ) {
   const email = normalizeEmail(rawEmail);
-  const record = await POCKET.collection("users").create({
+  const record = await POCKET.collection("champ_users").create({
     username: `${email.replace("@", "")}`,
     firstname,
     lastname,
@@ -64,7 +65,7 @@ function normalizeEmail(email) {
 }
 
 export async function findUser(email: string): Promise<User | null> {
-  const record = await POCKET.collection("users").getList<User>(0, 1, {
+  const record = await POCKET.collection("champ_users").getList<User>(0, 1, {
     filter: `email='${normalizeEmail(email)}'`,
   });
 
@@ -73,12 +74,12 @@ export async function findUser(email: string): Promise<User | null> {
 
 export async function setIsImportantBySlideId(slideId, isImportant) {
   const filter = `slide = '${slideId}' && user = '${getId()}'`;
-  const submission = await POCKET.collection("submissions").getFirstListItem(
-    filter
-  );
+  const submission = await POCKET.collection(
+    "champ_submissions"
+  ).getFirstListItem(filter);
 
   if (submission) {
-    await POCKET.collection("submissions").update(submission.id, {
+    await POCKET.collection("champ_submissions").update(submission.id, {
       ...submission,
       is_important: isImportant,
     });
@@ -89,7 +90,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
   const steps = [];
 
   if (!getGender()) {
-    const records = await POCKET.collection("gender").getFullList({
+    const records = await POCKET.collection("champ_gender").getFullList({
       sort: "-created",
     });
     steps.push({
@@ -114,14 +115,16 @@ export async function getOnboardingSteps(): Promise<any[]> {
           }
           return acc;
         }, "");
-        await POCKET.collection("users").update(getId(), { gender: answer });
+        await POCKET.collection("champ_users").update(getId(), {
+          gender: answer,
+        });
         window.localStorage.setItem("gender", answer);
       },
     });
   }
 
   if (!getAgeGroup()) {
-    const records = await POCKET.collection("age_groups").getFullList({
+    const records = await POCKET.collection("champ_age_groups").getFullList({
       sort: "-created",
     });
     steps.push({
@@ -146,14 +149,16 @@ export async function getOnboardingSteps(): Promise<any[]> {
           }
           return acc;
         }, "");
-        await POCKET.collection("users").update(getId(), { age_group: answer });
+        await POCKET.collection("champ_users").update(getId(), {
+          age_group: answer,
+        });
         window.localStorage.setItem("age_group", answer);
       },
     });
   }
 
   if (!getTopics().length) {
-    const records = await POCKET.collection("topics").getFullList({
+    const records = await POCKET.collection("champ_topics").getFullList({
       sort: "display_order",
     });
     setTopicsTitles(records);
@@ -168,7 +173,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
       onRender: async (options) => {
         setTopics(options.filter((t) => t.selected).map((t) => t.id));
 
-        // await POCKET.collection("users").update(getId(), {
+        // await POCKET.collection("champ_users").update(getId(), {
         //   topics: getTopics(),
         // });
       },
@@ -199,7 +204,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
           }
           return acc;
         }, []);
-        await POCKET.collection("users").update(getId(), {
+        await POCKET.collection("champ_users").update(getId(), {
           topics,
         });
       },
@@ -207,7 +212,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
   }
 
   if (!getTrainer().length) {
-    const records = await POCKET.collection("trainers").getFullList({
+    const records = await POCKET.collection("champ_trainers").getFullList({
       sort: "created",
     });
     steps.push({
@@ -220,7 +225,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
         const defaultValue = options[0].id;
         setTrainer(defaultValue);
 
-        await POCKET.collection("users").update(getId(), {
+        await POCKET.collection("champ_users").update(getId(), {
           trainer: defaultValue,
         });
       },
@@ -238,7 +243,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
           return acc;
         }, "");
         setTrainer(answer);
-        await POCKET.collection("users").update(getId(), {
+        await POCKET.collection("champ_users").update(getId(), {
           trainer: answer,
         });
       },
@@ -255,7 +260,7 @@ export async function fetchTrainers() {
   //     { id: "2", name: "Trainer 2" },
   //   ]);
   // });
-  const records = await POCKET.collection("trainers").getFullList({
+  const records = await POCKET.collection("champ_trainers").getFullList({
     sort: "created",
   });
   return records;
@@ -268,7 +273,7 @@ export async function fetchUsers() {
   //     { id: "2", email: "test2@example.com" },
   //   ]);
   // });
-  const records = await POCKET.collection("users").getFullList({
+  const records = await POCKET.collection("champ_users").getFullList({
     sort: "created",
   });
   return records;
@@ -286,7 +291,7 @@ export async function updateSlideImportance(
     isImportant,
   };
 
-  const record = await POCKET.collection("submissions").create(data);
+  const record = await POCKET.collection("champ_submissions").create(data);
   return record;
 }
 export async function updateSlideAnswer(
@@ -303,7 +308,7 @@ export async function updateSlideAnswer(
     desired_improvement,
   };
 
-  const record = await POCKET.collection("submissions").create(data);
+  const record = await POCKET.collection("champ_submissions").create(data);
   return record;
 }
 function getSubmissions() {
@@ -399,13 +404,13 @@ export function getSummary() {
 
 export async function fetchSubmissionsByTrainer(trainer_id) {
   let filter = `user.trainer.id ?= '${trainer_id}'`;
-  const records = await POCKET.collection("submissions").getFullList({
+  const records = await POCKET.collection("champ_submissions").getFullList({
     filter,
     expand: `user,slide,slide.topic,desired_improvement`,
     fields: `answer,expand.user.firstname,expand.user.lastname,expand.user.firstname,expand.user.lastname,expand.user.email,expand.slide.title,expand.slide.topic.name,expand.desired_improvement.name,is_important,expand.slide.display_order`,
     sort: "user.id,slide.display_order",
   });
-  const topics_res = await POCKET.collection("topics").getFullList({
+  const topics_res = await POCKET.collection("champ_topics").getFullList({
     sort: "display_order",
   });
   const topics = topics_res.reduce((acc, topic) => {
@@ -443,7 +448,9 @@ export async function getSlides() {
   setDesiredImprovements(desired_improvements);
 
   const topics = getTopics();
-  const submittedSlides = await POCKET.collection("submissions").getFullList({
+  const submittedSlides = await POCKET.collection(
+    "champ_submissions"
+  ).getFullList({
     filter: `user = '${getId()}'`,
   });
   const submissions = submittedSlides.reduce(
@@ -462,7 +469,7 @@ export async function getSlides() {
       : ""
   })`;
   console.log("FILTER", filter);
-  const records = await POCKET.collection("slides").getFullList({
+  const records = await POCKET.collection("champ_slides").getFullList({
     sort: "topic.display_order,display_order",
     filter,
   });
