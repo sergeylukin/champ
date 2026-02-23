@@ -98,9 +98,6 @@ export function RegistrationForm({
 
   return (
     <>
-      <h1 className="text-4xl font-semibold tracking-tight pt-0">
-        {"נא להזין שם מלא"}
-      </h1>
       <p className="text-lg pt-2 py-6 text-muted-foreground"> </p>
       <div className={cn("my-2 grid gap-6", className)} {...props}>
         <Form {...form}>
@@ -116,7 +113,7 @@ export function RegistrationForm({
                         <FormMessage />
                       </div>
                       <FormControl>
-                        <Input placeholder="שם פרטי" type="text" {...field} />
+                        <Input className="py-8 text-2xl" placeholder="שם פרטי" type="text" {...field} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -132,7 +129,7 @@ export function RegistrationForm({
                         <FormMessage />
                       </div>
                       <FormControl>
-                        <Input placeholder="שם משפחה" type="text" {...field} />
+                        <Input className="py-8 text-2xl" placeholder="שם משפחה" type="text" {...field} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -146,7 +143,9 @@ export function RegistrationForm({
                   {"טוען"}
                 </Button>
               ) : (
-                <Button type="submit">{"להתחבר"}</Button>
+                <Button size="lg" type="submit">
+                  {"הבא"}
+                </Button>
               )}
             </div>
           </form>
