@@ -92,7 +92,7 @@ export async function getTrainersData(): Promise<any> {
     });
     const data = {
       options: records,
-      title: "בחר את המטפל איתו אתה מבצע את ההערכה",
+      title: "שם המעריך (בחירה מרשימה)",
       subtitle: "",
       size: "small",
       component: "dropdown",
@@ -121,6 +121,42 @@ export async function getTrainersData(): Promise<any> {
         await POCKET.collection("champ_users").update(getId(), {
           trainer: answer,
         });
+      },
+    };
+
+    return data;
+}
+
+export async function getGendersData(): Promise<any> {
+  const records = await POCKET.collection("champ_gender").getFullList({
+      sort: "-created",
+    });
+    const data = {
+      options: records,
+      title: "מגדר",
+      subtitle:
+        "בחר/י את המגדר שהכי מתאים לך. תמונות וניסוחים בהערכה יופיעו בהתאמה למגדר שתבחר/י",
+      size: "small",
+      component: "boxes",
+      onRender: async (options) => {},
+      onChange: (val, currentOptions) => {
+        window.localStorage.setItem("gender", val);
+        return currentOptions.map((option) => {
+          if (option.id === val) return { ...option, selected: true };
+          return { ...option, selected: false };
+        });
+      },
+      update: async (options) => {
+        const answer = options.reduce((acc, item) => {
+          if (item.selected) {
+            acc = item.id;
+          }
+          return acc;
+        }, "");
+        await POCKET.collection("champ_users").update(getId(), {
+          gender: answer,
+        });
+        window.localStorage.setItem("gender", answer);
       },
     };
 
