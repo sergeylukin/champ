@@ -166,7 +166,7 @@ export function RegistrationForm({
                         <FormMessage />
                       </div>
                       <FormControl>
-                        <Input className="py-8 text-2xl text-white" placeholder="שם פרטי" type="text" {...field} />
+                        <Input className="py-8 text-2xl text-white" placeholder="שם הילד" type="text" {...field} />
                       </FormControl>
                     </FormItem>
                   )}
