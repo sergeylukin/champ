@@ -163,10 +163,46 @@ export async function getGendersData(): Promise<any> {
     return data;
 }
 
+export async function getAgesData(): Promise<any> {
+  const records = await POCKET.collection("champ_age_groups").getFullList({
+      sort: "-created",
+    });
+    const data = {
+      options: records,
+      title: "גיל הילד",
+      subtitle:
+        "בחר/י את טווח הגילאים שמתאים לגיל שלך. הפריטים בהערכה יופיעו. בהתאמה לגיל שתבחר/י",
+      size: "small",
+      component: "boxes",
+      onRender: async (options) => {},
+      onChange: (val, currentOptions) => {
+        window.localStorage.setItem("age_group", val);
+        return currentOptions.map((option) => {
+          if (option.id === val) return { ...option, selected: true };
+          return { ...option, selected: false };
+        });
+      },
+      update: async (options) => {
+        const answer = options.reduce((acc, item) => {
+          if (item.selected) {
+            acc = item.id;
+          }
+          return acc;
+        }, "");
+        await POCKET.collection("champ_users").update(getId(), {
+          age_group: answer,
+        });
+        window.localStorage.setItem("age_group", answer);
+      },
+    };
+
+    return data;
+}
+
 export async function getOnboardingSteps(): Promise<any[]> {
   const steps = [];
 
-  if (!getGender()) {
+  /*if (!getGender()) {
     const records = await POCKET.collection("champ_gender").getFullList({
       sort: "-created",
     });
@@ -198,9 +234,9 @@ export async function getOnboardingSteps(): Promise<any[]> {
         window.localStorage.setItem("gender", answer);
       },
     });
-  }
+  }*/
 
-  if (!getAgeGroup()) {
+  /*if (!getAgeGroup()) {
     const records = await POCKET.collection("champ_age_groups").getFullList({
       sort: "-created",
     });
@@ -232,7 +268,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
         window.localStorage.setItem("age_group", answer);
       },
     });
-  }
+  }*/
 
   if (!getTopics().length) {
     const records = await POCKET.collection("champ_topics").getFullList({
@@ -288,7 +324,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
     });
   }
 
-  if (!getTrainer().length) {
+  /*if (!getTrainer().length) {
     const records = await POCKET.collection("champ_trainers").getFullList({
       sort: "created",
     });
@@ -325,7 +361,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
         });
       },
     });
-  }
+  }*/
 
   return steps;
 }

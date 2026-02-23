@@ -20,6 +20,7 @@ import {
   useFormField,
 } from "@/components/ui/form";
 import {
+  getAgesData,
   getGendersData,
   getTrainersData,
   isLogged,
@@ -63,6 +64,7 @@ export function RegistrationForm({
   const [loading, setLoading] = React.useState(false);
   const [trainersData, setTrainersData] = React.useState({});
   const [gendersData, setGendersData] = React.useState({});
+  const [agesData, setAgesData] = React.useState({});
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,6 +82,8 @@ export function RegistrationForm({
       setTrainersData(trainersData);
       const gerndersData = await getGendersData();
       setGendersData(gerndersData);
+      const agesData = await getAgesData();
+      setAgesData(agesData);
     };
     f();
   }, []);
@@ -169,20 +173,37 @@ export function RegistrationForm({
                 />
               </div>
               <div className="grid gap-1">
-                <FormField
-                  control={form.control}
-                  name="lastname"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="text-right text-xxs">
-                        <FormMessage />
-                      </div>
-                      <FormControl>
-                        <Input className="py-8 text-2xl text-white" placeholder="שם משפחה" type="text" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+                <Select
+                  onValueChange={(val) => {
+                    console.log("CHANGE Ages SELECTION", val);
+                    /*const options = trainersData?.onChange(
+                      val,
+                      currentOptions
+                    );
+                    setCurrentOptions(options);
+
+                    steps[currentStep - 1]?.update(options);
+                    */
+                  }}
+                >
+                  <SelectTrigger
+                    className="rtl relative flex h-10 w-full rounded-md border border-input bg-bluelight pl-10 py-8 text-2xl text-white ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:hidden"
+                  >
+                    {/* White triangle on the left */}
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[24px] border-t-white" />
+                    <SelectValue placeholder={agesData?.title} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {/*<SelectLabel>Fruits</SelectLabel>*/}
+                      {agesData?.options?.map((option, index) => (
+                        <SelectItem value={option.id} key={index}>
+                          {option.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="grid gap=1">
                 <Select

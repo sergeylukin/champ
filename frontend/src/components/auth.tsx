@@ -47,7 +47,7 @@ export function AuthForm({ className, ...props }: UserAuthFormProps) {
 
   return (
     <div>
-      {step !== "login" ? (
+      {step === "login" ? (
         <LoginForm next={next} />
       ) : (
         <RegistrationForm email={email} />
