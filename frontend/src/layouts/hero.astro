@@ -10,9 +10,13 @@ const { animation, withIntro } = Astro.props;
 		{withIntro && <IntroSlide client:load />}
 		<div>
 			<div class="Main">
+				<!-- BELOW IS THE DEPRECATED BG COVER - FOR REFERENCE
 				<div class="Main-bg absolute h-full w-full grayscale
-					bg-login bg-no-repeat bg-center bg-origin-border bg-cover" />
-				<div class="Main-bottom absolute w-full" />
+						bg-login bg-no-repeat bg-center bg-origin-border bg-cover" />
+						-->
+				<div class="Cover-bg absolute h-full w-full
+						bg-cornerIllustration bg-left-bottom bg-no-repeat bg-origin-border" />
+				
 			</div>
 			<div class="container relative h-screen flex-col items-center
 			justify-center grid lg:max-w-none grid-cols-1 lg:px-0">
@@ -76,5 +80,14 @@ const { animation, withIntro } = Astro.props;
 		height: 20vh;
 		width: 100%;
 		background: white;
+	}
+
+	/* successor to .Main */
+	:global(.Cover) {
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		top: 0; left: 0;
+		height: 100%; width: 100%;
 	}
 </style>

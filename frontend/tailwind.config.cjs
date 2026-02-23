@@ -18,7 +18,9 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
+        // BG that appears throughout screens after "START" screen
         login: "url('/intro.jpg')",
+        cornerIllustration: "url('/corner-illustration.png')",
         slideintro: "url('/slide_intro.jpg')",
         finished: "url('/finished.jpg')",
       },
