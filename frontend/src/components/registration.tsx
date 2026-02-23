@@ -162,7 +162,7 @@ export function RegistrationForm({
                         <FormMessage />
                       </div>
                       <FormControl>
-                        <Input className="py-8 text-2xl" placeholder="שם פרטי" type="text" {...field} />
+                        <Input className="py-8 text-2xl text-white" placeholder="שם פרטי" type="text" {...field} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -178,7 +178,7 @@ export function RegistrationForm({
                         <FormMessage />
                       </div>
                       <FormControl>
-                        <Input className="py-8 text-2xl" placeholder="שם משפחה" type="text" {...field} />
+                        <Input className="py-8 text-2xl text-white" placeholder="שם משפחה" type="text" {...field} />
                       </FormControl>
                     </FormItem>
                   )}

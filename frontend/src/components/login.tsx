@@ -113,7 +113,7 @@ export function LoginForm({ className, next, ...props }: UserAuthFormProps) {
                         <Input
                           placeholder="כתובת מייל"
                           type="text"
-                          className="py-8 text-2xl"
+                          className="py-8 text-2xl text-white"
                           {...field}
                         />
                       </FormControl>
@@ -136,7 +136,7 @@ export function LoginForm({ className, next, ...props }: UserAuthFormProps) {
                         <Input
                           placeholder="סיסמה"
                           type="password"
-                          className="py-8 text-2xl"
+                          className="py-8 text-2xl text-white"
                           {...field}
                         />
                       </FormControl>
