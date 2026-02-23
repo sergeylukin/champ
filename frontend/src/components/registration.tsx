@@ -148,7 +148,9 @@ export function RegistrationForm({
                     <SelectGroup>
                       {/*<SelectLabel>Fruits</SelectLabel>*/}
                       {trainersData?.options?.map((option, index) => (
-                        <SelectItem value={option.id} key={index}>
+                        <SelectItem value={option.id} key={index}
+                          className="flex h-10 w-full rounded-md bg-bluelight px-10 py-2 text-2xl text-white text-right gap-[4px] hover:!text-white !text-white !bg-bluelight hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50"
+                        >
                           {option.name}
                         </SelectItem>
                       ))}
@@ -194,10 +196,11 @@ export function RegistrationForm({
                     <SelectValue placeholder={agesData?.title} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
+                    <SelectGroup className="p-0 m-0 gap-[4px] border-none bg-transparent">
                       {/*<SelectLabel>Fruits</SelectLabel>*/}
                       {agesData?.options?.map((option, index) => (
-                        <SelectItem value={option.id} key={index}>
+                        <SelectItem value={option.id} key={index}
+                          className="flex h-10 w-full rounded-md bg-bluelight px-10 py-2 text-2xl text-white text-right gap-[4px] hover:!text-white !text-white !bg-bluelight hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50">
                           {option.name}
                         </SelectItem>
                       ))}
@@ -230,7 +233,9 @@ export function RegistrationForm({
                     <SelectGroup>
                       {/*<SelectLabel>Fruits</SelectLabel>*/}
                       {gendersData?.options?.map((option, index) => (
-                        <SelectItem value={option.id} key={index}>
+                        <SelectItem value={option.id} key={index}
+                          className="flex h-10 w-full rounded-md bg-bluelight px-10 py-2 text-2xl text-white text-right gap-[4px] hover:!text-white !text-white !bg-bluelight hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50"
+                          >
                           {option.name}
                         </SelectItem>
                       ))}
