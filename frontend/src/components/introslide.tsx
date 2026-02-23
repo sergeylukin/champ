@@ -9,7 +9,7 @@ export const IntroSlide = () => {
         <div className="Intro-title pb-4">
           <Button
             type="submit"
-            className="mx-auto w-[200px] mt-5"
+            className="mx-auto w-[200px] mt-5 !bg-[#8591a1] !text-[#d1d8e0]"
             onClick={() => setVisible(false)}
           >
             {"התחל"}
