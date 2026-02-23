@@ -46,7 +46,7 @@ export function AuthForm({ className, ...props }: UserAuthFormProps) {
   };
 
   return (
-    <div className={"px-4 md:px-12"}>
+    <div>
       {step === "login" ? (
         <LoginForm next={next} />
       ) : (

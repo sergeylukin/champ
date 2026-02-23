@@ -91,10 +91,9 @@ export function LoginForm({ className, next, ...props }: UserAuthFormProps) {
 
   return (
     <>
-      <h1 className="text-4xl font-semibold tracking-tight pt-0">{"כניסה"}</h1>
-      <p className="text-lg pt-2 text-muted-foreground">
-        {"אנא הזן פרטי כניסה לאתר ההערכה"}
-      </p>
+      <h1 className="text-3xl font-semibold  text-primary tracking-tight pt-0">
+        {" נא להזין פרטי כניסה לאבחון"}
+      </h1>
       <div className={cn("my-2 grid gap-6", className)} {...props}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -112,8 +111,9 @@ export function LoginForm({ className, next, ...props }: UserAuthFormProps) {
                       </div>
                       <FormControl>
                         <Input
-                          placeholder="הזן כתובת מייל"
+                          placeholder="כתובת מייל"
                           type="text"
+                          className="py-8 text-2xl"
                           {...field}
                         />
                       </FormControl>
@@ -134,8 +134,9 @@ export function LoginForm({ className, next, ...props }: UserAuthFormProps) {
                       </div>
                       <FormControl>
                         <Input
-                          placeholder="הזן סיסמה"
+                          placeholder="סיסמה"
                           type="password"
+                          className="py-8 text-2xl"
                           {...field}
                         />
                       </FormControl>
@@ -149,8 +150,8 @@ export function LoginForm({ className, next, ...props }: UserAuthFormProps) {
                   {"טוען"}
                 </Button>
               ) : (
-                <Button className="mt-2" type="submit">
-                  {"להתחבר"}
+                <Button className="mt-2" size="lg" type="submit">
+                  {"התחברות"}
                 </Button>
               )}
             </div>
