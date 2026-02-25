@@ -43,10 +43,14 @@ export async function updateIntroSlideContents(md) {
 export async function registerWithPass(
   rawEmail: string,
   pass: string,
-  firstname: string,
-  lastname: string
+  name: string,
+  trainer: string,
+  age: string,
+  gender: string,
 ) {
   const email = normalizeEmail(rawEmail);
+  const firstname = name.split(' ')[0];
+  const lastname = name.split(' ')[1] ?? '';
   const record = await POCKET.collection("champ_users").create({
     username: `${email.replace("@", "")}`,
     firstname,
@@ -56,8 +60,22 @@ export async function registerWithPass(
     password: pass,
     passwordConfirm: pass,
     link: getUniqueId(),
+    gender,
+    age_group: age,
+    trainer,
   });
   addInSorage(record);
+  console.log('create user res: ', record)
+/*
+  const trainerUpdateRes = await POCKET.collection("champ_users").update(record.id, {
+    trainer,
+  });
+  console.log(trainerUpdateRes)*/
+/*
+    age_group: age,
+    gender,
+    trainer,*/
+
 }
 
 function normalizeEmail(email) {

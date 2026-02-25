@@ -33,13 +33,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const formSchema = z.object({
-  firstname: z.string({
+  name: z.string({
     // invalid_type_error: "foo",
-    required_error: "שם פרטי",
-  }),
-  lastname: z.string({
-    // invalid_type_error: "foo",
-    required_error: "שם משפחה",
+    required_error: "שם",
   }),
 });
 // export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
@@ -65,6 +61,10 @@ export function RegistrationForm({
   const [trainersData, setTrainersData] = React.useState({});
   const [gendersData, setGendersData] = React.useState({});
   const [agesData, setAgesData] = React.useState({});
+
+  const [trainer, setTrainer] = React.useState('');
+  const [age, setAge] = React.useState('');
+  const [gender, setGender] = React.useState('');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -97,8 +97,10 @@ export function RegistrationForm({
       await registerWithPass(
         email,
         PASS_BACKEND,
-        values.firstname,
-        values.lastname
+        values.name,
+        trainer,
+        age,
+        gender,
       );
       await loginWithPass(email, PASS_BACKEND);
       console.log("HOOORAY");
@@ -127,6 +129,8 @@ export function RegistrationForm({
                 <Select
                   onValueChange={(val) => {
                     console.log("CHANGE TRAINER SELECTION", val);
+                    setTrainer(val);
+                    window.localStorage.setItem("trainer", val);
                     /*const options = trainersData?.onChange(
                       val,
                       currentOptions
@@ -161,7 +165,7 @@ export function RegistrationForm({
               <div className="grid gap-1">
                 <FormField
                   control={form.control}
-                  name="firstname"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <div className="text-right text-xxs">
@@ -178,6 +182,8 @@ export function RegistrationForm({
                 <Select
                   onValueChange={(val) => {
                     console.log("CHANGE Ages SELECTION", val);
+                    setAge(val);
+                    window.localStorage.setItem("age_group", val);
                     /*const options = trainersData?.onChange(
                       val,
                       currentOptions
@@ -212,6 +218,8 @@ export function RegistrationForm({
                 <Select
                   onValueChange={(val) => {
                     console.log("CHANGE GENDER SELECTION", val);
+                    setGender(val);
+                    window.localStorage.setItem("gender", val);
                     /*const options = trainersData?.onChange(
                       val,
                       currentOptions
