@@ -188,7 +188,7 @@ export function Onboarding() {
                           steps[currentStep - 1]?.update(options);
                         }}
                         className={cn(
-                          "flex flex-col items-center justify-between rounded-md bg-secondary/[40%] p-4 hover:bg-secondary/[50%] hover:text-accent-foreground text-sm",
+                          "flex flex-col items-center justify-center bg-white border-4 border-primary text-2xl font-bold bg-accent1/[50%] p-4 h-[150px] hover:bg-secondary/[50%] hover:text-accent-foreground",
                           {
                             "font-bold": option.selected,
                             "border-secondary": option.selected,
@@ -239,7 +239,7 @@ export function Onboarding() {
                 className="mx-auto w-[200px]"
                 onClick={() => setCurrentStep(currentStep + 1)}
               >
-                {"הבא"}
+                {"התחל"}
               </Button>
             )}
           </CardFooter>

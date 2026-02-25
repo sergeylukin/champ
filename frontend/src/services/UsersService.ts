@@ -297,7 +297,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
       options: records
         .filter((option) => option.id !== "syo76yuz3y8avn7")
         .map((option) => ({ ...option, selected: false })),
-      title: "בחר/י את התחומים שאותם תרצה לכלול בהערכה",
+      title: "נא לבחור קטגוריות להערכה",
       subtitle: "",
       size: "large",
       component: "checkboxes",

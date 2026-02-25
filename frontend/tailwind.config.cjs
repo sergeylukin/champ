@@ -38,6 +38,7 @@ module.exports = {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
+        accent1: "#e1ddd4",
         // TODO: revisit
         // duplicate of primary, didn't find a way to reuse
         bluelight: "#618ca1",
