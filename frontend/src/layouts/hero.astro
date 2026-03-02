@@ -38,9 +38,11 @@ const { animation, withIntro } = Astro.props;
 
 <style>
 	:global(.Intro) {
-		background-image: url(/intro.jpg);
-		background-size: cover;
-		background-position: center center;
+		background-image: url(/intro_bg.png);
+		/*background-size: cover;*/
+		background-repeat: no-repeat;
+		background-color: #e1ddd4;
+		background-position: left bottom;
 	}
 	:global(.Intro-title) {
 		position: absolute;
