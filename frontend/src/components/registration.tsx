@@ -142,7 +142,7 @@ export function RegistrationForm({
                   }}
                 >
                   <SelectTrigger
-                    className="rtl relative flex h-10 w-full rounded-md border border-input bg-bluelight pl-10 py-8 text-2xl text-white ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:hidden"
+                    className="rtl relative flex h-10 w-full rounded-md border border-input bg-bluelight pl-10 py-8 text-3xl text-white ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:hidden"
                   >
                     {/* White triangle on the left */}
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[24px] border-t-white" />
@@ -153,8 +153,8 @@ export function RegistrationForm({
                       {/*<SelectLabel>Fruits</SelectLabel>*/}
                       {trainersData?.options?.map((option, index) => (
                         <SelectItem value={option.id} key={index}
-                          className="flex h-10 w-full rounded-md bg-bluelight px-10 py-2 text-2xl text-white text-right gap-[4px] hover:!text-white !text-white !bg-bluelight hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50"
-                        >
+                          className="flex h-10 w-full rounded-md justify-end px-10 py-2 text-2xl text-white text-right font-bold gap-[4px] hover:!text-white !text-primary !bg-accent1 hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50"
+                          >
                           {option.name}
                         </SelectItem>
                       ))}
@@ -172,7 +172,7 @@ export function RegistrationForm({
                         <FormMessage />
                       </div>
                       <FormControl>
-                        <Input className="py-8 text-2xl text-white" placeholder="שם הילד" type="text" {...field} />
+                        <Input className="py-8 text-3xl text-white" placeholder="שם הילד" type="text" {...field} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -195,7 +195,7 @@ export function RegistrationForm({
                   }}
                 >
                   <SelectTrigger
-                    className="rtl relative flex h-10 w-full rounded-md border border-input bg-bluelight pl-10 py-8 text-2xl text-white ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:hidden"
+                    className="rtl relative flex h-10 w-full rounded-md border border-input bg-bluelight pl-10 py-8 text-3xl text-white ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:hidden"
                   >
                     {/* White triangle on the left */}
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[24px] border-t-white" />
@@ -206,8 +206,9 @@ export function RegistrationForm({
                       {/*<SelectLabel>Fruits</SelectLabel>*/}
                       {agesData?.options?.map((option, index) => (
                         <SelectItem value={option.id} key={index}
-                          className="flex h-10 w-full rounded-md bg-bluelight px-10 py-2 text-2xl text-white text-right gap-[4px] hover:!text-white !text-white !bg-bluelight hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50">
-                          {option.name}
+                          className="flex h-10 w-full rounded-md justify-end px-10 py-2 text-2xl text-white text-right font-bold gap-[4px] hover:!text-white !text-primary !bg-accent1 hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {option.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -231,7 +232,7 @@ export function RegistrationForm({
                   }}
                 >
                   <SelectTrigger
-                    className="rtl relative flex h-10 w-full rounded-md border border-input bg-bluelight pl-10 py-8 text-2xl text-white ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:hidden"
+                    className="rtl relative flex h-10 w-full rounded-md border border-input bg-bluelight pl-10 py-8 text-3xl text-white ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:hidden"
                   >
                     {/* White triangle on the left */}
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[24px] border-t-white" />
@@ -242,7 +243,7 @@ export function RegistrationForm({
                       {/*<SelectLabel>Fruits</SelectLabel>*/}
                       {gendersData?.options?.map((option, index) => (
                         <SelectItem value={option.id} key={index}
-                          className="flex h-10 w-full rounded-md bg-bluelight px-10 py-2 text-2xl text-white text-right gap-[4px] hover:!text-white !text-white !bg-bluelight hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50"
+                          className="flex h-10 w-full rounded-md justify-end px-10 py-2 text-2xl text-white text-right font-bold gap-[4px] hover:!text-white !text-primary !bg-accent1 hover:!bg-bluelight disabled:cursor-not-allowed disabled:opacity-50"
                           >
                           {option.name}
                         </SelectItem>

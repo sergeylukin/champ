@@ -161,7 +161,7 @@ export function Player() {
             <div className={"absolute z-50 h-full w-full top-0 left-0"}>
               <div
                 className={
-                  "fixed left-0 top-0 z-10 h-full w-full bg-primary bg-finished bg-no-repeat bg-center bg-origin-border bg-cover flex align-center justify-center"
+                  "fixed left-0 top-0 z-10 h-full w-full bg-primary bg-white bg-no-repeat bg-center bg-origin-border bg-cover flex align-center justify-center"
                 }
               >
                 <div
@@ -175,7 +175,7 @@ export function Player() {
                   <div className="flex relative">
                     <Button
                       type="submit"
-                      className="mx-auto w-full bg-primary"
+                      className="mx-auto w-full"
                       onClick={logout}
                     >
                       {"סיום"}

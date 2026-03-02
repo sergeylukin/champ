@@ -89,7 +89,7 @@ export function Onboarding() {
             <DialogFooter>
               <DialogClose asChild className="">
                 <Button type="submit" className="mx-auto w-[200px]">
-                  {"נתחיל"}
+                  {"התחל"}
                 </Button>
               </DialogClose>
             </DialogFooter>
@@ -193,6 +193,8 @@ export function Onboarding() {
                             "font-bold": option.selected,
                             "border-secondary": option.selected,
                             "border-4": option.selected,
+                            "bg-secondary": option.selected,
+                            "font-white": option.selected,
                           }
                         )}
                       >
