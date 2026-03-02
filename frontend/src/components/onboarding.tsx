@@ -199,7 +199,8 @@ export function Onboarding() {
                         )}
                       >
                         {Icon && <Icon className="mb-3 h-6 w-6" />}
-                        {option.name}
+                        <div>{option.name}</div>
+                        <div className={"text-lg font-normal"}>{option.subtitle}</div>
                       </div>
                     );
                   })}

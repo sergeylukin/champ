@@ -703,7 +703,7 @@ function setTopicsTitles(topics) {
   console.log(topics);
   window.localStorage.setItem(
     "topics_titles",
-    topics.map((val) => `${val.id}|${val.name}`).join(";")
+    topics.map((val) => `${val.id}|${val.name}|${val.subtitle}`).join(";")
   );
 }
 export function getTopicsTitles() {
