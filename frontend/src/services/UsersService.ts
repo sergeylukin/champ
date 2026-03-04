@@ -716,7 +716,10 @@ export function getTopicsTitles() {
       ? {}
       : topicsTitles.reduce((acc, curr) => {
           const subval = curr?.split("|");
-          acc[subval[0]] = subval[1];
+          acc[subval[0]] = {
+            title: subval[1],
+            subtitle: subval[2],
+          };
           return acc;
         }, {});
 

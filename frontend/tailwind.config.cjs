@@ -20,6 +20,7 @@ module.exports = {
       backgroundImage: {
         // BG that appears throughout screens after "START" screen
         login: "url('/intro.jpg')",
+        topicIntro: "url('/topic_intro_bg.jpg')",
         cornerIllustration: "url('/corner-illustration.png')",
         slideintro: "url('/slide_intro.jpg')",
         finished: "url('/finished.jpg')",
@@ -39,6 +40,7 @@ module.exports = {
           foreground: "hsl(var(--secondary-foreground))",
         },
         accent1: "#e1ddd4",
+        accent2: "#f0efeb",
         // TODO: revisit
         // duplicate of primary, didn't find a way to reuse
         bluelight: "#618ca1",

@@ -122,7 +122,7 @@ export function Player() {
         },
         0
       );
-      const topicName = allTopics[currentSlide.topic];
+      const topicName = allTopics[currentSlide.topic].subtitle;
       console.log('before addSubmissionForSummary', desiredImprovementValue)
       addSubmissionForSummary(
         currentSlide.topic,
@@ -213,7 +213,8 @@ export function Player() {
                 <div className={"absolute z-50 h-full w-full top-0 left-0"}>
                   <Cover
                     onStart={() => setSlideIntroVisibility(false)}
-                    title={allTopics[currentSlide.topic]}
+                    title={allTopics[currentSlide.topic].subtitle}
+                    subtitle={allTopics[currentSlide.topic].title}
                   />
                 </div>
               )}
@@ -241,7 +242,7 @@ export function Player() {
                           src={
                             resetImages
                               ? `https://ratee.pockethost.io/api/files/m8ih3udzcgmwlaj/2aeudphns9aug9r/fff_AjkycInW6S.png?token=`
-                              : `https://ratee.pockethost.io/api/files/m8ih3udzcgmwlaj/${currentSlide.id}/${currentSlide.image1}`
+                              : `https://ratee.pockethost.io/api/files/d489ao66nz2g0cj/${currentSlide.id}/${currentSlide.image1}`
                           }
                           alt={currentSlide.image1_title}
                         />
@@ -272,7 +273,7 @@ export function Player() {
                           src={
                             resetImages
                               ? `https://ratee.pockethost.io/api/files/m8ih3udzcgmwlaj/2aeudphns9aug9r/fff_AjkycInW6S.png?token=`
-                              : `https://ratee.pockethost.io/api/files/m8ih3udzcgmwlaj/${currentSlide.id}/${currentSlide.image2}`
+                              : `https://ratee.pockethost.io/api/files/d489ao66nz2g0cj/${currentSlide.id}/${currentSlide.image2}`
                           }
                           alt={currentSlide.image2_title}
                         />
@@ -342,7 +343,7 @@ export function Player() {
                           addSubmission(slideId);
                           await updateSlideAnswer(slideId, null, null);
                         }
-                        const topicName = allTopics[currentSlide.topic];
+                        const topicName = allTopics[currentSlide.topic].subtitle;
                         addSubmissionForSummary(
                           currentSlide.topic,
                           topicName,
