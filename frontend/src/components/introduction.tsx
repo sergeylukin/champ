@@ -76,12 +76,14 @@ export const Introduction = ({ next }) => {
             <CardTitle className="text-center text-2xl">
             </CardTitle>
             <CardDescription className="flex-row justify-center align-center">
-              <img src="/hero-title.jpg" width="auto" height="5rem" className="mx-auto pb-3 left-0 right-0" ></img>
-              {/*<img
+              <h1 className="text-2xl">הסבר מבדק הסבר מבדק הסבר מבדק הסבר מבדק </h1>
+              <h1 className="text-2xl">הסבר מבדק הסבר מבדק הסבר מבדק הסבר מבדק </h1>
+              
+              <img
                 src="/explanation.jpg"
-                className="max-h-[calc(100vh-350px)] object-contain"
+                className="max-h-[calc(100vh-450px)] object-contain"
                 width={"100%"}
-              />*/}
+              />
               <div className="flex relative mt-4">
                 <Button
                   type="submit"

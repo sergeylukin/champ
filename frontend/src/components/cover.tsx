@@ -14,7 +14,7 @@ export const Cover = ({ onStart = () => {}, title = "עבודה והתנדבות
         }
       >
         <img src="/hero-title.jpg" width="auto" height="5rem" className="mx-auto pb-3 left-0 right-0" ></img>
-        <div className="bg-topicIntro bg-no-repeat bg-bottom-left bg-origin-border bg-accent2 h-[50vh] flex flex-col justify-center">
+        <div className="bg-topicIntro bg-no-repeat bg-bottom-left bg-origin-border bg-accent2 h-[50vh] w-[70vw] flex flex-col justify-center">
           <p className="text-center text-3xl ">{title}</p>
           <p className="text-center text-3xl">{subtitle}</p>
           <div className="flex relative mt-8">
