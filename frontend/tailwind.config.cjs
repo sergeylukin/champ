@@ -41,6 +41,7 @@ module.exports = {
         },
         accent1: "#e1ddd4",
         accent2: "#f0efeb",
+        accent3: "#d2d9e1",
         // TODO: revisit
         // duplicate of primary, didn't find a way to reuse
         bluelight: "#618ca1",

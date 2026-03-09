@@ -220,12 +220,12 @@ export function Player() {
               )}
               <Card className="border-0 pt-0 relative">
                 <CardHeader>
-                  <CardTitle className="bg-secondary/50 rounded-sm py-4 px-6 text-center">
-                    <p className="text-2xl sm:text-base">
+                  <CardTitle className="text-black bg-secondary/50 rounded-sm py-4 px-6 text-center">
+                    <p className="lg:text-5xl sm:text-base">
                       {currentSlide?.title}
                     </p>
                     <p
-                      className="text-l font-regular sm:text-base"
+                      className="pt-4 lg:text-xl font-regular sm:text-base"
                       style={{ fontWeight: "400" }}
                     >
                       {currentSlide?.subtitle}
@@ -234,7 +234,7 @@ export function Player() {
                   <CardDescription>{}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-column">
-                  <div className="grid gap-6 mt-[-1em] grid-cols-3">
+                  <div className="grid gap-6 mt-[-1em] grid-cols-2">
                     <div>
                       <figure className="flex-row justify-start">
                         <img
@@ -246,44 +246,117 @@ export function Player() {
                           }
                           alt={currentSlide.image1_title}
                         />
-                        <figcaption className="grow-0 my-2 sm:text-[0.85rem] md:text-md text-center text-gray-800 font-regular dark:text-gray-400">
-                          {currentSlide.image1_title}
-                        </figcaption>
                       </figure>
                     </div>
-                    <div className="align-middle grid grow">
-                      <Slider
-                        onValueChange={(val) => {
-                          const newValue = Math.round((val - 10) / 10) || 1;
-                          setCurrentValue(newValue);
-                          setCurrentValueStep(val);
-                          console.log("HEEEEy SLIDER", val, newValue);
-                        }}
-                        transparent
-                        value={[currentValueStep]}
-                        min={10}
-                        max={60}
-                        step={1}
-                      />
-                    </div>
-                    <div>
-                      <figure className="flex-row justify-start">
-                        <img
-                          className="aspect-square"
-                          src={
-                            resetImages
-                              ? `https://ratee.pockethost.io/api/files/m8ih3udzcgmwlaj/2aeudphns9aug9r/fff_AjkycInW6S.png?token=`
-                              : `https://ratee.pockethost.io/api/files/d489ao66nz2g0cj/${currentSlide.id}/${currentSlide.image2}`
-                          }
-                          alt={currentSlide.image2_title}
-                        />
-                        <figcaption className="grow-0 my-2 sm:text-[0.85rem] md:text-md text-center text-gray-800 font-regular dark:text-gray-400">
-                          {currentSlide.image2_title}
-                        </figcaption>
-                      </figure>
+                    {/* container for both vertically positioned sliders */}
+                    <div className="flex flex-col gap-4">
+                      <div className="align-middle grid grow bg-accent3">
+                        {/*TODO: rename to new field name */}
+                        <p className="pt-6 text-2xl font-bold">{currentSlide.image1_title}</p>
+                        <div className="px-6">
+                          <Slider
+                            onValueChange={(val) => {
+                              const newValue = Math.round((val - 10) / 10) || 1;
+                              setCurrentValue(newValue);
+                              setCurrentValueStep(val);
+                              console.log("HEEEEy SLIDER", val, newValue);
+                            }}
+                            transparent
+                            value={[currentValueStep]}
+                            min={10}
+                            max={60}
+                            step={1}
+                          />
+                          <div className="grid gap-6 grid-cols-3 text-xl pt-4 font-bold">
+                            <p>{"אף פעם"}</p>
+                            <p>{"לפעמים"}</p>
+                            <p>{"הרבה מאוד"}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="align-middle grid grow bg-accent1">
+                        {/* TODO: rename to new field name (question2_title) */}
+                        <p className="pt-6 text-2xl font-bold">{currentSlide.image2_title}</p>
+                        <div className="px-6">
+                          <Slider
+                            /* TODO: replace setter/getter */
+                              onValueChange={(val) => {
+                                const newValue = Math.round((val - 10) / 10) || 1;
+                                setCurrentValue(newValue);
+                                setCurrentValueStep(val);
+                                console.log("HEEEEy SLIDER", val, newValue);
+                              }}
+                              transparent
+                              value={[currentValueStep]}
+                              min={10}
+                              max={60}
+                              step={1}
+                            />
+                          <div className="grid gap-6 grid-cols-3 text-xl pt-4 font-bold">
+                            <p>{"בכלל לא"}</p>
+                            <p>{"קצת"}</p>
+                            <p>{"מאוד"}</p>
+                          </div>
+                        </div>
+                      </div>
+                      {/* here goes the Next / SKip... */}
+                      <div className="flex flex-row justify-between">
+                        {!nextButtonClickability && (
+                          <></>
+                            // TODO: revisit
+                          /*<div className="absolute w-full h-full flex  justify-center items-center bg-white bg-opacity-80"></div>*/
+                        )}
+                        <Button
+                          variant="outline"
+                          className="p-1 m-0 text-lg"
+                          onClick={async () => {
+                            setResetImages(true);
+                            setTimeout(() => setResetImages(false), 1000);
+                            const slideId = currentSlide ? currentSlide.id : null;
+                            if (slideId && !alreadySubmitted(slideId)) {
+                              addSubmission(slideId);
+                              await updateSlideAnswer(slideId, null, null);
+                            }
+                            const topicName = allTopics[currentSlide.topic].subtitle;
+                            addSubmissionForSummary(
+                              currentSlide.topic,
+                              topicName,
+                              slideId,
+                              currentSlide.title,
+                              currentSlide.subtitle,
+                              null,
+                              null
+                            );
+                            setCurrentSlideIndex(currentSlideIndex + 1);
+                          }}
+                        >
+                          {"דלג"}
+                          <img src="/reset.png" width={"30"} className="mr-4" />
+                        </Button>
+                        {(currentDesiredImprovement === null ||
+                          !nextButtonClickability) && (
+                            <></>
+                            // TODO: revisit
+                          //<div className="absolute w-full h-full flex  justify-center items-center bg-white bg-opacity-80"></div>
+                        )}
+                        <Button
+                          className="p-1 m-0 text-md bg-white"
+                          variant="outline"
+                          onClick={async () => {
+                            setResetImages(true);
+                            setTimeout(() => setResetImages(false), 1000);
+                            setCurrentSlideIndex(currentSlideIndex + 1);
+                          }}
+                        >
+                          {"הבא"}
+                          <img src="/arrow.png" width={"50"} />
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                  <div className="grid gap-2 mt-6">
+                  {/* TODO: remove
+                    that's the second slider (for reference) */}
+                  <div className="hidden grid gap-2 mt-6">
                     <p className="text-center text-md font-bold">
                       {currentSlide.buttons_title
                         ? currentSlide.buttons_title
@@ -326,59 +399,6 @@ export function Player() {
                     </RadioGroup>
                   </div>
                 </CardContent>
-
-                <CardFooter className="absolute bottom-0 left-0 bg-blend-overlay bg-white-200 mt-4 grid align-center grid-rows-2 gap-1 md:ml-12">
-                  <div>
-                    {!nextButtonClickability && (
-                      <div className="absolute w-full h-full flex  justify-center items-center bg-white bg-opacity-80"></div>
-                    )}
-                    <Button
-                      variant="outline"
-                      className="w-full p-1 m-0 text-lg"
-                      onClick={async () => {
-                        setResetImages(true);
-                        setTimeout(() => setResetImages(false), 1000);
-                        const slideId = currentSlide ? currentSlide.id : null;
-                        if (slideId && !alreadySubmitted(slideId)) {
-                          addSubmission(slideId);
-                          await updateSlideAnswer(slideId, null, null);
-                        }
-                        const topicName = allTopics[currentSlide.topic].subtitle;
-                        addSubmissionForSummary(
-                          currentSlide.topic,
-                          topicName,
-                          slideId,
-                          currentSlide.title,
-                          currentSlide.subtitle,
-                          null,
-                          null
-                        );
-                        setCurrentSlideIndex(currentSlideIndex + 1);
-                      }}
-                    >
-                      {"דלג"}
-                      <img src="/reset.png" width={"30"} className="mr-4" />
-                    </Button>
-                  </div>{" "}
-                  <div className="flex relative">
-                    {(currentDesiredImprovement === null ||
-                      !nextButtonClickability) && (
-                      <div className="absolute w-full h-full flex  justify-center items-center bg-white bg-opacity-80"></div>
-                    )}
-                    <Button
-                      className="w-full p-1 m-0 text-md bg-white"
-                      variant="outline"
-                      onClick={async () => {
-                        setResetImages(true);
-                        setTimeout(() => setResetImages(false), 1000);
-                        setCurrentSlideIndex(currentSlideIndex + 1);
-                      }}
-                    >
-                      {"הבא"}
-                      <img src="/arrow.png" width={"50"} />
-                    </Button>
-                  </div>
-                </CardFooter>
               </Card>
             </div>
           )}
