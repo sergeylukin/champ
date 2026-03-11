@@ -267,9 +267,9 @@ export function Player() {
                           src={
                             resetImages
                               ? `https://ratee.pockethost.io/api/files/m8ih3udzcgmwlaj/2aeudphns9aug9r/fff_AjkycInW6S.png?token=`
-                              : `https://ratee.pockethost.io/api/files/d489ao66nz2g0cj/${currentSlide.id}/${currentSlide.image1}`
+                              : `https://ratee.pockethost.io/api/files/d489ao66nz2g0cj/${currentSlide.id}/${currentSlide.image}`
                           }
-                          alt={currentSlide.image1_title}
+                          alt={currentSlide.subtitle}
                         />
                       </figure>
                     </div>
@@ -277,7 +277,7 @@ export function Player() {
                     <div className="flex flex-col gap-4">
                       <div className="align-middle grid grow bg-accent3">
                         {/*TODO: rename to new field name */}
-                        <p className="pt-6 text-2xl font-bold">{currentSlide.image1_title}</p>
+                        <p className="pt-6 text-2xl font-bold">{currentSlide.question1_title}</p>
                         <div className="px-6">
                           <Slider
                             onValueChange={(val) => {
@@ -301,7 +301,7 @@ export function Player() {
                       </div>
                       <div className="align-middle grid grow bg-accent1">
                         {/* TODO: rename to new field name (question2_title) */}
-                        <p className="pt-6 text-2xl font-bold">{currentSlide.image2_title}</p>
+                        <p className="pt-6 text-2xl font-bold">{currentSlide.question2_title}</p>
                         <div className="px-6">
                           <Slider
                               onValueChange={(val) => {
