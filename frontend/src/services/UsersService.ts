@@ -572,7 +572,7 @@ export async function fetchSubmissionsByTrainer(trainer_id) {
 export async function getSlides() {
   // Fetch desired improvements
   const desired_improvements = await POCKET.collection(
-    "desired_improvements"
+    "champ_desired_improvements"
   ).getFullList({
     sort: "display_order",
   });

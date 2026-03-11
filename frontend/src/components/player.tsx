@@ -57,11 +57,27 @@ export function Player() {
   const [currentSlideIndex, setCurrentSlideIndex] = React.useState(null);
   const [currentSlide, setCurrentSlide] = React.useState(null);
   const [currentValue, setCurrentValue] = React.useState(3);
+  
+  // Explantion:
+  // Desired improvement is a 1-to-1 relation in DB
+  // In UI it's represented as number (1-5) via <Slider />
+  //
+  // When slider value changes -> id of desired_improvement is fetched from
+  // numToDesiredImprovementIdMap and stored in currentDesiredImprovement 
+  //
+  // In addition, currentNumericDesiredImprovement is updated
+  // to reflect current slider state 
+  //
+  // coupled to how it's stored in DB
+  const desiredImprovementNumericValues = [5, 4, 3, 2, 1];
+  // output format: {1: 'some id', 2: 'another id', ...}
+  const numToDesiredImprovementIdMap = allDesiredImprovements.reduce((acc, curr, index) => {
+    acc[desiredImprovementNumericValues[index]] = curr.id;
+    return acc;
+  }, {});
   const [currentDesiredImprovement, setCurrentDesiredImprovement] =
     React.useState(null);
-  
-    // TODO: revisit
-  const [currentNumericDesiredImprovement, setNumericCurrentDesiredImprovement] = React.useState(30);
+  const [currentNumericDesiredImprovement, setNumericCurrentDesiredImprovement] = React.useState(3);
 
   const [nextButtonClickability, setNextButtonClickability] =
     React.useState(true);
@@ -73,6 +89,9 @@ export function Player() {
   const [topicOutroCover, setTopicOutroVisibility] = React.useState(false);
   var converter = new showdown.Converter();
   var html = converter.makeHtml(introSlideContents);
+
+
+  
 
   React.useEffect(() => {
     const f = async () => {
@@ -148,12 +167,6 @@ export function Player() {
   console.log("asdasdasd", slideIntroVisibility);
 
 
-  const desiredImprovementNumericValues = [1, 2, 3, 4, 5];
-  // output format: {1: 'some id', 2: 'another id', ...}
-  const numToDesiredImprovementIdMap = getDesiredImprovements().reduce((acc, curr, index) => {
-    acc[desiredImprovementNumericValues[index]] = curr.id;
-    return acc;
-  }, {});
 
   return (
     <>
@@ -291,59 +304,14 @@ export function Player() {
                         <p className="pt-6 text-2xl font-bold">{currentSlide.image2_title}</p>
                         <div className="px-6">
                           <Slider
-                            /* TODO: replace setter/getter */
                               onValueChange={(val) => {
-                                const newValue = Math.round((val - 10) / 10) || 1;
-                                //setCurrentValue(newValue);
-                                //setCurrentValueStep(val);
-
-                                // val is numeric value
-                                // setter accepts :id of desired_improveent
-
-/*
-<RadioGroup
-                      onValueChange={(val) => {
-                        setCurrentDesiredImprovement(val);
-                      }}
-                      defaultValue={currentDesiredImprovement}
-                      value={currentDesiredImprovement}
-                      className={cn("grid gap-2 sm:grid-cols-5 w-[75%] m-auto")}
-                    >
-                      {getDesiredImprovements().map((option, index) => {
-                        option.selected =
-                          currentDesiredImprovement === option.id;
-
-                        return (
-
-*/
-
-                                // define a map { <num>: :id }
-                                console.log('changed to ' + newValue)
-                               
-
-                                console.log("the holy map", numToDesiredImprovementIdMap);
-
-                                setCurrentDesiredImprovement(numToDesiredImprovementIdMap[newValue]);
-                                console.log('set currentDesiredImpr to ', numToDesiredImprovementIdMap[newValue])
-
-                                // set the numeric value
-                                
-                                // TODO: revisit
-                                const sliderFormatValue = Object.keys(numToDesiredImprovementIdMap).find(
-                                  k => numToDesiredImprovementIdMap[k] === currentDesiredImprovement
-                                ) * 10 + 10;
-
-                                console.log('slider format value: ', sliderFormatValue)
-                                
-                                setNumericCurrentDesiredImprovement(sliderFormatValue);
-
+                                setCurrentDesiredImprovement(numToDesiredImprovementIdMap[val]);
+                                setNumericCurrentDesiredImprovement(val);
                               }}
                               transparent
-                              // input: id
-                              // convert into 10 ... 60
                               value={[currentNumericDesiredImprovement]}
-                              min={10}
-                              max={50}
+                              min={1}
+                              max={5}
                               step={1}
                             />
                           <div className="grid gap-6 grid-cols-3 text-xl pt-4 font-bold">
