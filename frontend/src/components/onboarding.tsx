@@ -167,7 +167,7 @@ export function Onboarding() {
                   })}
                 >
                   {currentOptions?.map((option, index) => {
-                    if (option.id === "syo76yuz3y8avn7") {
+                    if (option.id === "9u5qup8hprc70ug") {
                       return;
                     }
                     const Icon =

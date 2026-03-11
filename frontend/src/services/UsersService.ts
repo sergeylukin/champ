@@ -295,7 +295,7 @@ export async function getOnboardingSteps(): Promise<any[]> {
     setTopicsTitles(records);
     steps.push({
       options: records
-        .filter((option) => option.id !== "syo76yuz3y8avn7")
+        .filter((option) => option.id !== "9u5qup8hprc70ug")
         .map((option) => ({ ...option, selected: false })),
       title: "נא לבחור קטגוריות להערכה",
       subtitle: "",
@@ -315,11 +315,11 @@ export async function getOnboardingSteps(): Promise<any[]> {
           return { ...option };
         });
         const isSpecialOptionEnabled =
-          options.filter((option) => option.id === "syo76yuz3y8avn7").length >
+          options.filter((option) => option.id === "9u5qup8hprc70ug").length >
           0;
         if (options.length > 0 && !isSpecialOptionEnabled) {
           const specialOption = { ...options[0] };
-          specialOption.id = "syo76yuz3y8avn7";
+          specialOption.id = "9u5qup8hprc70ug";
           specialOption.selected = true;
           options.push(specialOption);
           console.log("added", specialOption);

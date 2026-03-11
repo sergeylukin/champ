@@ -135,6 +135,7 @@ export function Player() {
       const answer = currentValue;
       if (slideId && !alreadySubmitted(slideId)) {
         addSubmission(slideId);
+        console.log('before updateing answer', currentDesiredImprovement)
         await updateSlideAnswer(slideId, answer, currentDesiredImprovement);
       }
       const desiredImprovementValue = allDesiredImprovements.reduce(
@@ -267,7 +268,7 @@ export function Player() {
                           src={
                             resetImages
                               ? `https://ratee.pockethost.io/api/files/m8ih3udzcgmwlaj/2aeudphns9aug9r/fff_AjkycInW6S.png?token=`
-                              : `https://ratee.pockethost.io/api/files/d489ao66nz2g0cj/${currentSlide.id}/${currentSlide.image}`
+                              : `https://ratee.pockethost.io/api/files/7un2ljqbqmwf5ba/${currentSlide.id}/${currentSlide.image}`
                           }
                           alt={currentSlide.subtitle}
                         />
@@ -276,7 +277,6 @@ export function Player() {
                     {/* container for both vertically positioned sliders */}
                     <div className="flex flex-col gap-4">
                       <div className="align-middle grid grow bg-accent3">
-                        {/*TODO: rename to new field name */}
                         <p className="pt-6 text-2xl font-bold">{currentSlide.question1_title}</p>
                         <div className="px-6">
                           <Slider
@@ -305,6 +305,8 @@ export function Player() {
                         <div className="px-6">
                           <Slider
                               onValueChange={(val) => {
+                                console.log('changed di to ', val)
+                                console.log('setting id: ', numToDesiredImprovementIdMap[val])
                                 setCurrentDesiredImprovement(numToDesiredImprovementIdMap[val]);
                                 setNumericCurrentDesiredImprovement(val);
                               }}
