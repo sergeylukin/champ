@@ -426,6 +426,7 @@ export async function updateSlideImportance(
   return record;
 }
 export async function updateSlideAnswer(
+  submissionId,
   slideId,
   answer = 3,
   desired_improvement = null
@@ -439,8 +440,11 @@ export async function updateSlideAnswer(
     desired_improvement,
   };
 
-  const record = await POCKET.collection("champ_submissions").create(data);
-  return record;
+  if (submissionId) {
+    return await POCKET.collection("champ_submissions").update(submissionId, data);
+  } else {
+    return await POCKET.collection("champ_submissions").create(data);
+  }
 }
 function getSubmissions() {
   const submissions: string[] = window.localStorage

@@ -56,6 +56,9 @@ export function Player() {
   const [slides, setSlides] = React.useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = React.useState(null);
   const [currentSlide, setCurrentSlide] = React.useState(null);
+  // holds id of current answer - to update record by id if answer is changed in UI
+  // is reset when user navigates to next question
+  const [currentSubmissionId, setCurrentSubmissionId] = React.useState(null);
   const [currentValue, setCurrentValue] = React.useState(3);
   
   // Explantion:
@@ -133,21 +136,19 @@ export function Player() {
     const f = async () => {
       const slideId = currentSlide ? currentSlide.id : null;
       const answer = currentValue;
-      if (slideId && !alreadySubmitted(slideId)) {
-        addSubmission(slideId);
+      if (slideId) {
+        if (!alreadySubmitted(slideId)) {
+          addSubmission(slideId);
+        }
         console.log('before updateing answer', currentDesiredImprovement)
-        await updateSlideAnswer(slideId, answer, currentDesiredImprovement);
+        const record = await updateSlideAnswer(currentSubmissionId, slideId, answer, currentDesiredImprovement);
+        console.log('SET SUBMISSION ID TO ', record.id)
+        setCurrentSubmissionId(record.id);
       }
-      const desiredImprovementValue = allDesiredImprovements.reduce(
-        (acc, curr, ind) => {
-          console.log('reduce: picking desiredImprovementValue', curr, currentDesiredImprovement, ind, acc)
-          if (curr.id === currentDesiredImprovement) acc = ind + 1;
-          return acc;
-        },
-        0
-      );
+
+      
       const topicName = allTopics[currentSlide.topic].subtitle;
-      console.log('before addSubmissionForSummary', desiredImprovementValue)
+      console.log('before addSubmissionForSummary', currentDesiredImprovement)
       addSubmissionForSummary(
         currentSlide.topic,
         topicName,
@@ -155,7 +156,7 @@ export function Player() {
         currentSlide.title,
         currentSlide.subtitle,
         answer,
-        desiredImprovementValue
+        currentDesiredImprovement
       );
       setNextButtonClickability(true);
     };
@@ -305,10 +306,13 @@ export function Player() {
                         <div className="px-6">
                           <Slider
                               onValueChange={(val) => {
-                                console.log('changed di to ', val)
-                                console.log('setting id: ', numToDesiredImprovementIdMap[val])
-                                setCurrentDesiredImprovement(numToDesiredImprovementIdMap[val]);
                                 setNumericCurrentDesiredImprovement(val);
+                              }}
+                              // Explanation:
+                              // in order to avoid DB updates on every slider tick change
+                              // onValueCommit is called when user releases pointer
+                              onValueCommit={(val) => {
+                                setCurrentDesiredImprovement(numToDesiredImprovementIdMap[val]);
                               }}
                               transparent
                               value={[currentNumericDesiredImprovement]}
@@ -337,9 +341,12 @@ export function Player() {
                             setResetImages(true);
                             setTimeout(() => setResetImages(false), 1000);
                             const slideId = currentSlide ? currentSlide.id : null;
-                            if (slideId && !alreadySubmitted(slideId)) {
-                              addSubmission(slideId);
-                              await updateSlideAnswer(slideId, null, null);
+                            // TODO: can be extracted (currently duplicated)
+                            if (slideId) {
+                              if (!alreadySubmitted(slideId)) {
+                                addSubmission(slideId);
+                              }
+                              await updateSlideAnswer(currentSubmissionId, slideId, null, null);
                             }
                             const topicName = allTopics[currentSlide.topic].subtitle;
                             addSubmissionForSummary(
@@ -352,6 +359,7 @@ export function Player() {
                               null
                             );
                             setCurrentSlideIndex(currentSlideIndex + 1);
+                            setCurrentSubmissionId(null);
                           }}
                         >
                           {"דלג"}
@@ -370,6 +378,7 @@ export function Player() {
                             setResetImages(true);
                             setTimeout(() => setResetImages(false), 1000);
                             setCurrentSlideIndex(currentSlideIndex + 1);
+                            setCurrentSubmissionId(null);
                           }}
                         >
                           {"הבא"}
@@ -377,50 +386,6 @@ export function Player() {
                         </Button>
                       </div>
                     </div>
-                  </div>
-                  {/* TODO: remove
-                    that's the second slider (for reference) */}
-                  <div className="hidden grid gap-2 mt-6">
-                    <p className="text-center text-md font-bold">
-                      {currentSlide.buttons_title
-                        ? currentSlide.buttons_title
-                        : "באיזו מידה חשוב לך לשפר את הביצוע / להיות עצמאי יותר בביצוע שלה?"}
-                    </p>
-                    <RadioGroup
-                      onValueChange={(val) => {
-                        setCurrentDesiredImprovement(val);
-                      }}
-                      defaultValue={currentDesiredImprovement}
-                      value={currentDesiredImprovement}
-                      className={cn("grid gap-2 sm:grid-cols-5 w-[75%] m-auto")}
-                    >
-                      {getDesiredImprovements().map((option, index) => {
-                        option.selected =
-                          currentDesiredImprovement === option.id;
-
-                        return (
-                          <div key={`${currentSlide.id}_${index}`}>
-                            <RadioGroupItem
-                              value={option.id}
-                              id={`${currentSlide.id}_${option.id}`}
-                              className="peer sr-only"
-                            />
-                            <Label
-                              htmlFor={`${currentSlide.id}_${option.id}`}
-                              style={{ textWrap: "nowrap" }}
-                              className={cn(
-                                "flex flex-col items-center justify-between rounded-sm bg-secondary/50 py-4 px-4 hover:bg-secondary/80 text-white text-center",
-                                {
-                                  "bg-secondary": option.selected,
-                                }
-                              )}
-                            >
-                              {option.name}
-                            </Label>
-                          </div>
-                        );
-                      })}
-                    </RadioGroup>
                   </div>
                 </CardContent>
               </Card>
