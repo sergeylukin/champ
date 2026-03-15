@@ -506,7 +506,7 @@ export function getSummaryByTopicId(topicId) {
         slideId: curr.slideId,
         topicName: curr.topicName,
         answer: curr.answer,
-        desired_answer: curr.desiredImprovementValue,
+        desired_answer: getDesiredImprovementNumericValueById(curr.desiredImprovementValue) ?? '-',
         title: curr.slideTitle,
         subtitle: curr.slideSubtitle,
       });
@@ -754,6 +754,25 @@ export function getDesiredImprovements() {
 
   console.log("HEEEEEEEEEY IMPROVEMENTS", improvements, res);
   return res;
+}
+
+
+/*
+ * output format: {1: 'some id', 2: 'another id', ...}
+ */
+export function getDesiredImprovementsIdMap() {
+  // coupled to how it's stored in DB
+  const desiredImprovementNumericValues = [5, 4, 3, 2, 1];
+  return getDesiredImprovements().reduce((acc, curr, index) => {
+      acc[desiredImprovementNumericValues[index]] = curr.id;
+      return acc;
+    }, {});
+}
+
+export function getDesiredImprovementNumericValueById(id: number): number | undefined {
+  const desiredImprovementsMap = getDesiredImprovementsIdMap();
+  const value = Object.keys(desiredImprovementsMap).find(key => desiredImprovementsMap[key] === id);
+  return value ? Number(value) : undefined;
 }
 
 export const isOnboarded = () => {

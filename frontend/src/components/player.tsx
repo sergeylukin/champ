@@ -46,6 +46,7 @@ import {
   getTopicsTitles,
   getDesiredImprovements,
   fetchIntroSlideContents,
+  getDesiredImprovementsIdMap,
 } from "@/services/UsersService";
 import { cn } from "@/lib/utils";
 
@@ -71,13 +72,8 @@ export function Player() {
   // In addition, currentNumericDesiredImprovement is updated
   // to reflect current slider state 
   //
-  // coupled to how it's stored in DB
-  const desiredImprovementNumericValues = [5, 4, 3, 2, 1];
   // output format: {1: 'some id', 2: 'another id', ...}
-  const numToDesiredImprovementIdMap = allDesiredImprovements.reduce((acc, curr, index) => {
-    acc[desiredImprovementNumericValues[index]] = curr.id;
-    return acc;
-  }, {});
+  const numToDesiredImprovementIdMap = getDesiredImprovementsIdMap();
   const [currentDesiredImprovement, setCurrentDesiredImprovement] =
     React.useState(null);
   const [currentNumericDesiredImprovement, setNumericCurrentDesiredImprovement] = React.useState(3);
