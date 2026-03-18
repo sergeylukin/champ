@@ -57,9 +57,11 @@ export function Player() {
   const [slides, setSlides] = React.useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = React.useState(null);
   const [currentSlide, setCurrentSlide] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
   // holds id of current answer - to update record by id if answer is changed in UI
   // is reset when user navigates to next question
   const [currentSubmissionId, setCurrentSubmissionId] = React.useState(null);
+  // TODO: rename to more explicit
   const [currentValue, setCurrentValue] = React.useState(3);
   
   // Explantion:
@@ -111,7 +113,8 @@ export function Player() {
       if (slides?.[currentSlideIndex]) {
         setCurrentSlide(slides[currentSlideIndex]);
         setCurrentValue(3);
-        setCurrentDesiredImprovement(null);
+        setCurrentDesiredImprovement(numToDesiredImprovementIdMap[3]);
+        console.log('Mounted - set defaults (anwer, desired improvement): ', currentValue, currentDesiredImprovement);
       }
       if (
         !!currentSlideIndex &&
@@ -125,43 +128,39 @@ export function Player() {
     f();
   }, [currentSlideIndex]);
 
-  // On desired_improvement slider change
-  // shall the other slider be here too?
-  React.useEffect(() => {
+  // "THE" callback - runs when Next / Skip are pressed
+  const submitAnswers = async () => {
     setNextButtonClickability(false);
-    const f = async () => {
-      const slideId = currentSlide ? currentSlide.id : null;
-      const answer = currentValue; // holds 1-5
-      if (slideId) {
-        if (!alreadySubmitted(slideId)) {
-          addSubmission(slideId);
-        }
-        console.log('before updateing answer', currentDesiredImprovement)
-        const record = await updateSlideAnswer(currentSubmissionId, slideId, answer, currentDesiredImprovement);
-        console.log('SET SUBMISSION ID TO ', record.id)
-        setCurrentSubmissionId(record.id);
-      }
+    const slideId = currentSlide ? currentSlide.id : null;
 
-      
-      const topicName = allTopics[currentSlide.topic].subtitle;
-      console.log('before addSubmissionForSummary', currentDesiredImprovement)
-      addSubmissionForSummary(
-        currentSlide.topic,
-        topicName,
-        slideId,
-        currentSlide.title,
-        currentSlide.subtitle,
-        answer,
-        currentDesiredImprovement
-      );
-      setNextButtonClickability(true);
-    };
-    if (currentDesiredImprovement !== null) {
-      f();
-    } else {
-      setNextButtonClickability(true);
+    // TODO: inverse 1 => 5 etc.
+    const answer = currentValue; // holds 1-5
+
+    if (slideId) {
+      if (!alreadySubmitted(slideId)) {
+        console.log('creating new submission for slideId ', slideId)
+        addSubmission(slideId);
+      }
+      console.log('before saving to DB - answer, desired impr.', answer, currentDesiredImprovement)
+      const record = await updateSlideAnswer(currentSubmissionId, slideId, answer, currentDesiredImprovement);
+      console.log('SET SUBMISSION ID TO ', record.id)
+      setCurrentSubmissionId(record.id);
     }
-  }, [currentDesiredImprovement]);
+
+    
+    const topicName = allTopics[currentSlide.topic].subtitle;
+    console.log('before addSubmissionForSummary', currentDesiredImprovement)
+    addSubmissionForSummary(
+      currentSlide.topic,
+      topicName,
+      slideId,
+      currentSlide.title,
+      currentSlide.subtitle,
+      answer,
+      currentDesiredImprovement
+    );
+    setNextButtonClickability(true);
+  }
 
   return (
     <>
@@ -238,6 +237,11 @@ export function Player() {
                   />
                 </div>
               )}
+              {isLoading && (
+                <div className={"absolute z-50 h-full w-full inset-0 bg-white/70"}>
+                  
+                </div>
+              )}
               <Card className="border-0 pt-0 relative">
                 <CardHeader>
                   <CardTitle className="text-black bg-secondary/50 rounded-sm py-4 px-6 text-center">
@@ -275,8 +279,11 @@ export function Player() {
                         <div className="px-6">
                           <Slider
                             onValueChange={(val) => {
-                              setCurrentValue(val);
-                              console.log("Upper SLIDER val changed to: ", val);
+                              // Explanation:
+                              // in shadcn even non-range <Slider /> component works with same API of value=<number[]> 
+                              const newValue = val[0];
+                              setCurrentValue(newValue);
+                              console.log("Upper SLIDER val changed to: ", newValue);
                             }}
                             transparent
                             value={[currentValue]}
@@ -329,26 +336,15 @@ export function Player() {
                           variant="outline"
                           className="p-1 m-0 text-lg"
                           onClick={async () => {
+                            setIsLoading(true);
+                            setCurrentDesiredImprovement(null);
+                            setCurrentValue(null);
+                            await submitAnswers();
+                            setIsLoading(false);
+
                             setResetImages(true);
                             setTimeout(() => setResetImages(false), 1000);
-                            const slideId = currentSlide ? currentSlide.id : null;
-                            // TODO: can be extracted (currently duplicated)
-                            if (slideId) {
-                              if (!alreadySubmitted(slideId)) {
-                                addSubmission(slideId);
-                              }
-                              await updateSlideAnswer(currentSubmissionId, slideId, null, null);
-                            }
-                            const topicName = allTopics[currentSlide.topic].subtitle;
-                            addSubmissionForSummary(
-                              currentSlide.topic,
-                              topicName,
-                              slideId,
-                              currentSlide.title,
-                              currentSlide.subtitle,
-                              null,
-                              null
-                            );
+                            
                             setCurrentSlideIndex(currentSlideIndex + 1);
                             setCurrentSubmissionId(null);
                           }}
@@ -366,6 +362,11 @@ export function Player() {
                           className="p-1 m-0 text-md bg-white"
                           variant="outline"
                           onClick={async () => {
+                            // check if those work from inside the submitAnswers async func
+                            setIsLoading(true);
+                            await submitAnswers();
+                            setIsLoading(false);
+                            
                             setResetImages(true);
                             setTimeout(() => setResetImages(false), 1000);
                             setCurrentSlideIndex(currentSlideIndex + 1);
