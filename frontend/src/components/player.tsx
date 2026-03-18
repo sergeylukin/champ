@@ -80,7 +80,7 @@ export function Player() {
 
   const [nextButtonClickability, setNextButtonClickability] =
     React.useState(true);
-  const [currentValueStep, setCurrentValueStep] = React.useState(35);
+
   const [introSlideContents, setIntroSlideContents] = React.useState("");
   const [introSlideOpen, setIntroSlideOpen] = React.useState(true);
   const [resetImages, setResetImages] = React.useState(false);
@@ -105,14 +105,12 @@ export function Player() {
     f();
   }, []);
 
+  // On mount - set defaults
   React.useEffect(() => {
     const f = async () => {
-      const slideId = currentSlide ? currentSlide.id : null;
-      const answer = currentValue;
       if (slides?.[currentSlideIndex]) {
         setCurrentSlide(slides[currentSlideIndex]);
         setCurrentValue(3);
-        setCurrentValueStep(35);
         setCurrentDesiredImprovement(null);
       }
       if (
@@ -127,11 +125,13 @@ export function Player() {
     f();
   }, [currentSlideIndex]);
 
+  // On desired_improvement slider change
+  // shall the other slider be here too?
   React.useEffect(() => {
     setNextButtonClickability(false);
     const f = async () => {
       const slideId = currentSlide ? currentSlide.id : null;
-      const answer = currentValue;
+      const answer = currentValue; // holds 1-5
       if (slideId) {
         if (!alreadySubmitted(slideId)) {
           addSubmission(slideId);
@@ -162,9 +162,6 @@ export function Player() {
       setNextButtonClickability(true);
     }
   }, [currentDesiredImprovement]);
-  console.log("asdasdasd", slideIntroVisibility);
-
-
 
   return (
     <>
@@ -278,15 +275,13 @@ export function Player() {
                         <div className="px-6">
                           <Slider
                             onValueChange={(val) => {
-                              const newValue = Math.round((val - 10) / 10) || 1;
-                              setCurrentValue(newValue);
-                              setCurrentValueStep(val);
-                              console.log("HEEEEy SLIDER", val, newValue);
+                              setCurrentValue(val);
+                              console.log("Upper SLIDER val changed to: ", val);
                             }}
                             transparent
-                            value={[currentValueStep]}
-                            min={10}
-                            max={60}
+                            value={[currentValue]}
+                            min={1}
+                            max={5}
                             step={1}
                           />
                           <div className="grid gap-6 grid-cols-3 text-xl pt-4 font-bold">
