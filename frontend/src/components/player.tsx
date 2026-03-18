@@ -88,11 +88,14 @@ export function Player() {
   const [resetImages, setResetImages] = React.useState(false);
   const [slideIntroVisibility, setSlideIntroVisibility] = React.useState(false);
   const [topicOutroCover, setTopicOutroVisibility] = React.useState(false);
-  var converter = new showdown.Converter();
-  var html = converter.makeHtml(introSlideContents);
 
-
-  
+  const resetInputs = () => {
+    const defaultAnswer = 3;
+    const defaultDesiredImprovementValue = 3;
+    setCurrentValue(defaultAnswer);
+    setNumericCurrentDesiredImprovement(defaultDesiredImprovementValue);
+    setCurrentDesiredImprovement(numToDesiredImprovementIdMap[defaultDesiredImprovementValue]);
+  }
 
   React.useEffect(() => {
     const f = async () => {
@@ -112,8 +115,7 @@ export function Player() {
     const f = async () => {
       if (slides?.[currentSlideIndex]) {
         setCurrentSlide(slides[currentSlideIndex]);
-        setCurrentValue(3);
-        setCurrentDesiredImprovement(numToDesiredImprovementIdMap[3]);
+        resetInputs();
         console.log('Mounted - set defaults (anwer, desired improvement): ', currentValue, currentDesiredImprovement);
       }
       if (
@@ -344,6 +346,7 @@ export function Player() {
                             setCurrentValue(null);
                             await submitAnswers();
                             setIsLoading(false);
+                            resetInputs();
 
                             setResetImages(true);
                             setTimeout(() => setResetImages(false), 1000);
@@ -369,6 +372,7 @@ export function Player() {
                             setIsLoading(true);
                             await submitAnswers();
                             setIsLoading(false);
+                            resetInputs();
                             
                             setResetImages(true);
                             setTimeout(() => setResetImages(false), 1000);
