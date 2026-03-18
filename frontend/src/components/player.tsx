@@ -128,13 +128,16 @@ export function Player() {
     f();
   }, [currentSlideIndex]);
 
+  const invertAnswer = (value) => {
+    // Value can only be in 1-5 range
+    return 6 - value;
+  }
+
   // "THE" callback - runs when Next / Skip are pressed
   const submitAnswers = async () => {
     setNextButtonClickability(false);
     const slideId = currentSlide ? currentSlide.id : null;
-
-    // TODO: inverse 1 => 5 etc.
-    const answer = currentValue; // holds 1-5
+    const answer = invertAnswer(currentValue); // holds 1-5
 
     if (slideId) {
       if (!alreadySubmitted(slideId)) {
