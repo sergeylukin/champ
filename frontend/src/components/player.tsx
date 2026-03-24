@@ -240,8 +240,8 @@ export function Player() {
                 <div className={"absolute z-50 h-full w-full top-0 left-0"}>
                   <Cover
                     onStart={() => setSlideIntroVisibility(false)}
-                    title={allTopics[currentSlide.topic].subtitle}
-                    subtitle={allTopics[currentSlide.topic].title}
+                    title={allTopics[currentSlide.topic].title}
+                    subtitle={allTopics[currentSlide.topic].subtitle}
                   />
                 </div>
               )}
