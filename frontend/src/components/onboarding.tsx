@@ -44,7 +44,8 @@ export function Onboarding() {
   const [currentOptions, setCurrentOptions] = React.useState([]);
   const [currentStep, setCurrentStep] = React.useState(null);
   const [introSlideContents, setIntroSlideContents] = React.useState("");
-  const [introSlideOpen, setIntroSlideOpen] = React.useState(true);
+  // Intro slide is HIDDEN, set to true if needed
+  const [introSlideOpen, setIntroSlideOpen] = React.useState(false);
   const IconBoy = Icons["boy"];
   const Icon = Icons["girl"];
   var converter = new showdown.Converter();
@@ -77,7 +78,8 @@ export function Onboarding() {
       {(currentStep > steps.length || !currentStep) && (
         <div className="fixed inset-0 bg-white min-h-screen min-w-screen z-10"></div>
       )}
-      {introSlideContents && (
+      {/* Hidden by design, uncomment if needed */}
+      {/*introSlideContents && (
         <Dialog open={introSlideOpen} onOpenChange={setIntroSlideOpen}>
           <DialogContent className="absolute w-[80vw] bg-red max-w-[80vw]">
             <DialogHeader className="top-0">
@@ -95,7 +97,7 @@ export function Onboarding() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      )}
+      )*/}
       {!introSlideOpen && (
         <Card size={steps[currentStep - 1]?.size}>
           <CardHeader>
