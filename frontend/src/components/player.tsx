@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -49,6 +50,8 @@ import {
   getDesiredImprovementsIdMap,
 } from "@/services/UsersService";
 import { cn } from "@/lib/utils";
+import { faCircle, faFaceFrown, faFaceSmile } from "@fortawesome/free-regular-svg-icons";
+import { faCircle as faSolidCircle } from "@fortawesome/free-solid-svg-icons";
 
 const allTopics = getTopicsTitles();
 const allDesiredImprovements = getDesiredImprovements();
@@ -281,7 +284,10 @@ export function Player() {
                     <div className="flex flex-col gap-4">
                       <div className="align-middle grid grow bg-accent3">
                         <p className="pt-6 text-2xl font-bold">{currentSlide.question1_title}</p>
-                        <div className="px-6">
+                        <div className="px-12 relative mt-5">
+                          <div className="absolute top-[-22px] left-3">
+                            <FontAwesomeIcon size="2x" icon={faSolidCircle} />
+                          </div>
                           <Slider
                             onValueChange={(val) => {
                               // Explanation:
@@ -296,34 +302,43 @@ export function Player() {
                             max={5}
                             step={1}
                           />
-                          <div className="grid gap-6 grid-cols-3 text-xl pt-4 font-bold">
+                          <div className="absolute top-[-22px]  right-3">
+                            <FontAwesomeIcon size="2x" icon={faCircle} />
+                          </div>
+                          <div className="grid gap-6 grid-cols-3 text-lg pt-4 font-bold whitespace-nowrap ">
                             <p>{"אף פעם"}</p>
                             <p>{"לפעמים"}</p>
                             <p>{"הרבה מאוד"}</p>
                           </div>
                         </div>
                       </div>
-                      <div className="align-middle grid grow bg-accent1">
+                      <div className="align-middle grid grow bg-accent1 pb-2">
                         {/* TODO: rename to new field name (question2_title) */}
                         <p className="pt-6 text-2xl font-bold">{currentSlide.question2_title}</p>
-                        <div className="px-6">
+                        <div className="px-12 relative mt-5">
+                          <div className="absolute top-[-20px] left-3">
+                            <FontAwesomeIcon size="2x" icon={faFaceSmile} />
+                          </div>
                           <Slider
-                              onValueChange={(val) => {
-                                setNumericCurrentDesiredImprovement(val);
-                              }}
-                              // Explanation:
-                              // in order to avoid DB updates on every slider tick change
-                              // onValueCommit is called when user releases pointer
-                              onValueCommit={(val) => {
-                                setCurrentDesiredImprovement(numToDesiredImprovementIdMap[val]);
-                              }}
-                              transparent
-                              value={[currentNumericDesiredImprovement]}
-                              min={1}
-                              max={5}
-                              step={1}
-                            />
-                          <div className="grid gap-6 grid-cols-3 text-xl pt-4 font-bold">
+                            onValueChange={(val) => {
+                              setNumericCurrentDesiredImprovement(val);
+                            }}
+                            // Explanation:
+                            // in order to avoid DB updates on every slider tick change
+                            // onValueCommit is called when user releases pointer
+                            onValueCommit={(val) => {
+                              setCurrentDesiredImprovement(numToDesiredImprovementIdMap[val]);
+                            }}
+                            transparent
+                            value={[currentNumericDesiredImprovement]}
+                            min={1}
+                            max={5}
+                            step={1}
+                          />
+                          <div className="absolute top-[-20px]  right-3">
+                            <FontAwesomeIcon size="2x" icon={faFaceFrown} />
+                          </div>
+                          <div className="grid gap-6 grid-cols-3 text-lg pt-4 font-bold whitespace-nowrap ">
                             <p>{"בכלל לא"}</p>
                             <p>{"קצת"}</p>
                             <p>{"מאוד"}</p>
