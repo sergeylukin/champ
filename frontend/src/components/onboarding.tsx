@@ -190,7 +190,7 @@ export function Onboarding() {
                           steps[currentStep - 1]?.update(options);
                         }}
                         className={cn(
-                          "flex flex-col items-center justify-center bg-white border-4 border-primary text-2xl font-bold bg-accent1/[50%] p-4 h-[150px] hover:text-white hover:bg-secondary/[80%]",
+                          "flex flex-col items-center leading-tight justify-center bg-white border-4 border-primary text-xl font-bold bg-accent1/[50%] p-4 h-[150px] hover:text-white hover:bg-secondary/[80%]",
                           {
                             "font-bold": option.selected,
                             "border-secondary": option.selected,
@@ -202,7 +202,7 @@ export function Onboarding() {
                       >
                         {Icon && <Icon className="mb-3 h-6 w-6" />}
                         <div>{option.name}</div>
-                        <div className={"text-lg font-normal"}>{option.subtitle}</div>
+                        <div className={"text-md font-normal"}>{option.subtitle}</div>
                       </div>
                     );
                   })}
