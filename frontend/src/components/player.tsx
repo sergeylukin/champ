@@ -359,7 +359,11 @@ export function Player() {
                             setIsLoading(true);
                             setCurrentDesiredImprovement(null);
                             setCurrentValue(null);
-                            await submitAnswers();
+                            try {
+                              await submitAnswers();
+                            } catch (e) {
+                              setIsLoading(false)
+                            }
                             setIsLoading(false);
                             resetInputs();
 
@@ -385,7 +389,11 @@ export function Player() {
                           onClick={async () => {
                             // check if those work from inside the submitAnswers async func
                             setIsLoading(true);
-                            await submitAnswers();
+                            try {
+                              await submitAnswers();
+                            } catch (e) {
+                              setIsLoading(false)
+                            }
                             setIsLoading(false);
                             resetInputs();
                             
