@@ -118,7 +118,7 @@ export const columns = [
         case "במידה מועטה":
           formatted = "2";
           break;
-        case "לא משנה לי":
+        case "במידה בינונית":
           formatted = "3";
           break;
         case "במידה רבה":
