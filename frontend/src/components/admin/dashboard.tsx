@@ -136,6 +136,11 @@ export function AdminDashboard() {
                             }, {});
                             setUsersNames(usersNames);
                             setCurrentUser(ALL_USERS);
+                            console.log('setting records [original]', records)
+                            // desired improvement comes as translated string...
+                            // TODO: 
+                            // populate id instead ?
+                            // or can be printed as is - simpler and straight forward - NOT AN OPTION, need num
                             setData(records);
                             setOriginalData(records);
                             setIsLoading(false);
@@ -176,6 +181,7 @@ export function AdminDashboard() {
                                     );
                               setData(newData);
                               console.log("user changed to ", val);
+                              console.log('set new data', newData)
                             }}
                           >
                             <SelectTrigger className="w-[200px]">
@@ -270,6 +276,8 @@ export function AdminDashboard() {
                                         const slideStripped = slide
                                           .trim()
                                           .replace(/[^-\s\p{L}\d]/gu, "");
+                                        
+                                        console.log('converting data - translation key ', translatedKey, ' value: ', value)
                                         const column = `${topicStripped}-${slideStripped}-${translatedKey}`;
                                         users[userKey][column] = value
                                           ? String(value)

@@ -385,15 +385,31 @@ export async function getOnboardingSteps(): Promise<any[]> {
 }
 
 export async function fetchTrainers() {
-  // const records = new Promise((resolve, reject) => {
-  //   resolve([
-  //     { id: "1", name: "Trainer 1" },
-  //     { id: "2", name: "Trainer 2" },
-  //   ]);
-  // });
-  const records = await POCKET.collection("champ_trainers").getFullList({
+  const adminEmail = POCKET.authStore.model?.email;
+
+  console.log("current logged in email:", adminEmail);
+
+  const collection = POCKET.collection("champ_trainers");
+
+  // No logged-in user
+  if (!adminEmail) {
+    return [];
+  }
+
+  // First, try to get trainers assigned to this manager
+  const records = await collection.getFullList({
+    filter: `manager_email = "${adminEmail}"`,
     sort: "created",
   });
+
+  // If no trainers are assigned to this manager,
+  // return all trainers
+  if (records.length === 0) {
+    return await collection.getFullList({
+      sort: "created",
+    });
+  }
+
   return records;
 }
 
