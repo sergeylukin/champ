@@ -146,7 +146,7 @@ export function Onboarding() {
                         <Label
                           htmlFor={option.id}
                           className={cn(
-                            "flex flex-col items-center justify-between rounded-md bg-secondary/[40%] p-4 hover:bg-secondary/[50%] hover:text-bold hover:text-accent-foreground",
+                            "flex flex-col items-center justify-center border-4 border-primary text-center text-lg lg:text-md xl:text-sm font-bold bg-accent1/[50%] p-4 h-[150px] break-words overflow-hidden hover:text-white hover:bg-secondary/[80%]",
                             {
                               "font-bold": option.selected,
                               "border-secondary": option.selected,
@@ -190,7 +190,7 @@ export function Onboarding() {
                           steps[currentStep - 1]?.update(options);
                         }}
                         className={cn(
-                          "flex flex-col items-center leading-tight justify-center bg-white border-4 border-primary text-xl font-bold bg-accent1/[50%] p-4 h-[150px] hover:text-white hover:bg-secondary/[80%]",
+                          "flex flex-col items-center justify-center border-4 border-primary text-center text-lg lg:text-md xl:text-sm font-bold bg-accent1/[50%] p-4 h-[150px] break-words overflow-hidden hover:text-white hover:bg-secondary/[80%]",
                           {
                             "font-bold": option.selected,
                             "border-secondary": option.selected,
