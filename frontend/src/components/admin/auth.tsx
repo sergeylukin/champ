@@ -169,12 +169,15 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
               </p>
             )}
             {loading ? (
-              <Button disabled className="bg-red-300">
+              <Button disabled className="bg-red-300 text-sm text-white">
                 <Loader2 className="mx-2 h-4 w-4 animate-spin" />
                 {"טוען"}
               </Button>
             ) : (
-              <Button type="submit" className="bg-red-500 hover:bg-red-300">
+              <Button
+                type="submit"
+                className="bg-red-500 text-sm text-white hover:bg-red-300 hover:text-white"
+              >
                 {otpId
                   ? "לאמת ולהתחבר"
                   : mfaId
