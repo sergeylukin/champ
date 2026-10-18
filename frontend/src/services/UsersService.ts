@@ -6,12 +6,19 @@ export interface User {
   name: string;
 }
 
-export async function adminLoginWithPass(email: string, pass: string) {
-  const authData = await POCKET.admins.authWithPassword(
-    normalizeEmail(email),
-    pass
+export async function requestAdminOTP(email: string) {
+  const result = await POCKET.collection("_superusers").requestOTP(
+    normalizeEmail(email)
   );
-  const admin = authData.admin;
+  return result.otpId;
+}
+
+export async function adminLoginWithOTP(otpId: string, otp: string) {
+  const authData = await POCKET.collection("_superusers").authWithOTP(
+    otpId,
+    otp
+  );
+  const admin = authData.record;
   window.localStorage.setItem("admin_uid", admin.id);
   window.localStorage.setItem("admin_email", admin.email);
 }

@@ -17,9 +17,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useFormField,
 } from "@/components/ui/form";
-import { isAdminLogged, adminLoginWithPass } from "@/services/UsersService";
+import {
+  adminLoginWithOTP,
+  isAdminLogged,
+  requestAdminOTP,
+} from "@/services/UsersService";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -31,18 +34,17 @@ const formSchema = z.object({
     .email("נה להכניס כתובת מייל תקינה")
     .min(5),
 
-  password: z
-    .string({
-      required_error: "לא יכול להיות ריק",
-    })
-    .nonempty("לא יכול להיות ריק"),
 });
 
 export function AdminAuth({ className, ...props }: UserAuthFormProps) {
   // 1. Define your form.
   const [loading, setLoading] = React.useState(false);
+  const [otpId, setOtpId] = React.useState("");
+  const [otp, setOtp] = React.useState("");
+  const [error, setError] = React.useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: { email: "" },
   });
   React.useEffect(() => {
     if (isAdminLogged()) {
@@ -53,22 +55,29 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     try {
       setLoading(true);
-      await adminLoginWithPass(values.email, values.password);
-      setLoading(false);
-      window.location.href = "/admin/dashboard";
-    } catch (err: any) {
-      setLoading(false);
-      console.error(err);
-      if (err.response?.code === 400) {
-        // window.localStorage.setItem('uid', user.id);
-        console.log("ERROR", err);
-        // setErr(err.response?.data?.password?.message ?? "Failed to login.");
+      setError("");
+      if (!otpId) {
+        const requestedOtpId = await requestAdminOTP(values.email);
+        setOtpId(requestedOtpId);
+      } else {
+        if (!otp.trim()) {
+          setError("נא להזין את הקוד שהתקבל במייל");
+          return;
+        }
+        await adminLoginWithOTP(otpId, otp.trim());
+        window.location.href = "/admin/dashboard";
       }
-      console.log(values);
+    } catch (err: any) {
+      console.error(err);
+      setError(
+        otpId
+          ? "הקוד שגוי או שפג תוקפו. נא לנסות שוב."
+          : "לא ניתן לשלוח קוד לכתובת הזו. נא לבדוק את הכתובת ולנסות שוב."
+      );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -81,38 +90,44 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
               control={form.control}
               name="email"
               render={({ field }) => {
-                const { error, formMessageId } = useFormField();
-                console.log(error, formMessageId);
                 return (
                   <FormItem>
                     <div className="text-right text-xxs">
                       <FormMessage />
                     </div>
                     <FormControl>
-                      <Input placeholder="אימייל" type="text" {...field} />
+                      <Input
+                        placeholder="אימייל"
+                        type="email"
+                        autoComplete="email"
+                        readOnly={!!otpId}
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 );
               }}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => {
-                const { error, formMessageId } = useFormField();
-                console.log(error, formMessageId);
-                return (
-                  <FormItem>
-                    <div className="text-right text-xxs">
-                      <FormMessage />
-                    </div>
-                    <FormControl>
-                      <Input placeholder="סיסמה" type="password" {...field} />
-                    </FormControl>
-                  </FormItem>
-                );
-              }}
-            />
+            {otpId && (
+              <>
+                <p className="text-right text-sm text-muted-foreground" role="status">
+                  {"אם כתובת המייל משויכת למנהל, נשלח אליה קוד התחברות."}
+                </p>
+                <Input
+                  placeholder="קוד חד-פעמי"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  value={otp}
+                  onChange={(event) => setOtp(event.target.value)}
+                />
+              </>
+            )}
+            {error && (
+              <p className="text-right text-sm text-destructive" role="alert">
+                {error}
+              </p>
+            )}
             {loading ? (
               <Button disabled className="bg-red-300">
                 <Loader2 className="mx-2 h-4 w-4 animate-spin" />
@@ -120,7 +135,20 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
               </Button>
             ) : (
               <Button type="submit" className="bg-red-500 hover:bg-red-300">
-                {"להתחבר"}
+                {otpId ? "לאמת ולהתחבר" : "שליחת קוד"}
+              </Button>
+            )}
+            {otpId && !loading && (
+              <Button
+                type="button"
+                variant="link"
+                onClick={() => {
+                  setOtpId("");
+                  setOtp("");
+                  setError("");
+                }}
+              >
+                {"שינוי כתובת מייל"}
               </Button>
             )}
           </div>
