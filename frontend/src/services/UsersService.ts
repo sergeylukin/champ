@@ -6,6 +6,22 @@ export interface User {
   name: string;
 }
 
+export async function adminLoginWithPass(email: string, pass: string) {
+  try {
+    await POCKET.collection("_superusers").authWithPassword(
+      normalizeEmail(email),
+      pass
+    );
+  } catch (err: any) {
+    const mfaId = err.response?.mfaId;
+    if (typeof mfaId === "string") return mfaId;
+    throw err;
+  }
+
+  POCKET.authStore.clear();
+  throw new Error("The superuser password login did not return an MFA challenge.");
+}
+
 export async function requestAdminOTP(email: string) {
   const result = await POCKET.collection("_superusers").requestOTP(
     normalizeEmail(email)
@@ -13,10 +29,15 @@ export async function requestAdminOTP(email: string) {
   return result.otpId;
 }
 
-export async function adminLoginWithOTP(otpId: string, otp: string) {
+export async function adminLoginWithOTP(
+  otpId: string,
+  otp: string,
+  mfaId: string
+) {
   const authData = await POCKET.collection("_superusers").authWithOTP(
     otpId,
-    otp
+    otp,
+    { mfaId }
   );
   const admin = authData.record;
   window.localStorage.setItem("admin_uid", admin.id);

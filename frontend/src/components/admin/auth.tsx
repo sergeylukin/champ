@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
+  adminLoginWithPass,
   adminLoginWithOTP,
   isAdminLogged,
   requestAdminOTP,
@@ -33,18 +34,21 @@ const formSchema = z.object({
     })
     .email("נה להכניס כתובת מייל תקינה")
     .min(5),
-
+  password: z
+    .string({ required_error: "לא יכול להיות ריק" })
+    .nonempty("לא יכול להיות ריק"),
 });
 
 export function AdminAuth({ className, ...props }: UserAuthFormProps) {
   // 1. Define your form.
   const [loading, setLoading] = React.useState(false);
+  const [mfaId, setMfaId] = React.useState("");
   const [otpId, setOtpId] = React.useState("");
   const [otp, setOtp] = React.useState("");
   const [error, setError] = React.useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { email: "" },
+    defaultValues: { email: "", password: "" },
   });
   React.useEffect(() => {
     if (isAdminLogged()) {
@@ -55,9 +59,19 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    let hasMfaChallenge = Boolean(mfaId);
     try {
       setLoading(true);
       setError("");
+      if (!mfaId) {
+        const challengeId = await adminLoginWithPass(
+          values.email,
+          values.password
+        );
+        hasMfaChallenge = true;
+        setMfaId(challengeId);
+      }
+
       if (!otpId) {
         const requestedOtpId = await requestAdminOTP(values.email);
         setOtpId(requestedOtpId);
@@ -66,7 +80,7 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
           setError("נא להזין את הקוד שהתקבל במייל");
           return;
         }
-        await adminLoginWithOTP(otpId, otp.trim());
+        await adminLoginWithOTP(otpId, otp.trim(), mfaId);
         window.location.href = "/admin/dashboard";
       }
     } catch (err: any) {
@@ -74,7 +88,9 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
       setError(
         otpId
           ? "הקוד שגוי או שפג תוקפו. נא לנסות שוב."
-          : "לא ניתן לשלוח קוד לכתובת הזו. נא לבדוק את הכתובת ולנסות שוב."
+          : hasMfaChallenge
+            ? "לא ניתן לשלוח קוד. ניתן לנסות שוב."
+            : "האימייל או הסיסמה שגויים. נא לנסות שוב."
       );
     } finally {
       setLoading(false);
@@ -100,7 +116,7 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
                         placeholder="אימייל"
                         type="email"
                         autoComplete="email"
-                        readOnly={!!otpId}
+                        readOnly={!!mfaId}
                         {...field}
                       />
                     </FormControl>
@@ -108,10 +124,34 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
                 );
               }}
             />
-            {otpId && (
+            {!mfaId && (
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="text-right text-xxs">
+                      <FormMessage />
+                    </div>
+                    <FormControl>
+                      <Input
+                        placeholder="סיסמה"
+                        type="password"
+                        autoComplete="current-password"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
+            {mfaId && otpId && (
               <>
-                <p className="text-right text-sm text-muted-foreground" role="status">
-                  {"אם כתובת המייל משויכת למנהל, נשלח אליה קוד התחברות."}
+                <p
+                  className="text-right text-sm text-muted-foreground"
+                  role="status"
+                >
+                  {"נשלח קוד אימות למייל. יש להזין אותו להשלמת ההתחברות."}
                 </p>
                 <Input
                   placeholder="קוד חד-פעמי"
@@ -135,17 +175,23 @@ export function AdminAuth({ className, ...props }: UserAuthFormProps) {
               </Button>
             ) : (
               <Button type="submit" className="bg-red-500 hover:bg-red-300">
-                {otpId ? "לאמת ולהתחבר" : "שליחת קוד"}
+                {otpId
+                  ? "לאמת ולהתחבר"
+                  : mfaId
+                    ? "שליחת קוד"
+                    : "להתחבר"}
               </Button>
             )}
-            {otpId && !loading && (
+            {mfaId && !loading && (
               <Button
                 type="button"
                 variant="link"
                 onClick={() => {
+                  setMfaId("");
                   setOtpId("");
                   setOtp("");
                   setError("");
+                  form.reset({ email: "", password: "" });
                 }}
               >
                 {"שינוי כתובת מייל"}
