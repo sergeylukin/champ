@@ -39,8 +39,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DataTable } from "@/components/submissions/data-table";
-import { type Submission, columns } from "@/components/submissions/columns";
+import { SubmissionsTable } from "@/components/admin/submissions-table";
+import { Graphs } from "@/components/admin/graphs";
 import {
   addSubmission,
   updateSlideAnswer,
@@ -62,6 +62,7 @@ export function AdminDashboard() {
   const [usersNames, setUsersNames] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState(ALL_USERS);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [view, setView] = React.useState("table");
   const [data, setData] = React.useState([]);
   const [originalData, setOriginalData] = React.useState([]);
   const [introSliderMarkdown, setIntroSliderMarkdown] = React.useState("");
@@ -173,6 +174,7 @@ export function AdminDashboard() {
                           <Select
                             onValueChange={(val) => {
                               setCurrentUser(val);
+                              setView("table");
                               const newData =
                                 val === ALL_USERS
                                   ? originalData
@@ -206,6 +208,23 @@ export function AdminDashboard() {
                             </SelectContent>
                           </Select>
                         ) : null}
+                        {!isLoading && currentUser !== ALL_USERS && (
+                          <div className="flex items-center gap-x-2">
+                            <Button
+                              variant={view === "table" ? "secondary" : "ghost"}
+                              onClick={() => setView("table")}
+                            >
+                              {"טבלה"}
+                            </Button>
+                            <span className="text-muted-foreground">|</span>
+                            <Button
+                              variant={view === "graphs" ? "secondary" : "ghost"}
+                              onClick={() => setView("graphs")}
+                            >
+                              {"גרפים"}
+                            </Button>
+                          </div>
+                        )}
                       </div>
                       {currentTrainerName && !isLoading && (
                         <div
@@ -445,7 +464,11 @@ export function AdminDashboard() {
                         </div>
                       )}
                       <div className="mt-6">
-                        <DataTable data={data} columns={columns} />
+                        {currentUser !== ALL_USERS && view === "graphs" ? (
+                          <Graphs data={data} />
+                        ) : (
+                          <SubmissionsTable data={data} />
+                        )}
                       </div>
                     </CardContent>
                   </Card>

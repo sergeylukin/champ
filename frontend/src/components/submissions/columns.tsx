@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { desiredImprovementToNumber } from "@/lib/submissions";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -109,27 +110,10 @@ export const columns = [
     accessorKey: "desired_improvement",
     header: () => <div className="text-right">{"רצון לשינוי"}</div>,
     cell: ({ row }) => {
-      const answer = row.getValue("desired_improvement");
-      let formatted = "-";
-      switch (answer) {
-        case "כלל לא":
-          formatted = "1";
-          break;
-        case "במידה מועטה":
-          formatted = "2";
-          break;
-        case "במידה בינונית":
-          formatted = "3";
-          break;
-        case "במידה רבה":
-          formatted = "4";
-          break;
-        case "במידה רבה מאוד":
-          formatted = "5";
-          break;
-        default:
-          formatted = "-";
-      }
+      const score = desiredImprovementToNumber(
+        row.getValue("desired_improvement")
+      );
+      const formatted = score === null ? "-" : String(score);
 
       return <div className="text-right font-bold">{formatted}</div>;
     },
