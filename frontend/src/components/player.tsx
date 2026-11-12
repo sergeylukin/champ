@@ -45,7 +45,6 @@ import {
   alreadySubmitted,
   getSlides,
   getTopicsTitles,
-  getDesiredImprovements,
   fetchIntroSlideContents,
   getDesiredImprovementsIdMap,
 } from "@/services/UsersService";
@@ -54,8 +53,6 @@ import { faCircle, faFaceFrown, faFaceSmile } from "@fortawesome/free-regular-sv
 import { faCircle as faSolidCircle } from "@fortawesome/free-solid-svg-icons";
 
 const allTopics = getTopicsTitles();
-const allDesiredImprovements = getDesiredImprovements();
-
 export function Player() {
   const [slides, setSlides] = React.useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = React.useState(null);

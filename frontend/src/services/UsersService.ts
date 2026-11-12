@@ -540,29 +540,29 @@ export function addSubmissionForSummary(
       .join(";")
   );
 }
-function invertDesiredAnswer(numericValue) {
-  return 6 - numericValue;
-}
-
 export function getSummaryByTopicId(topicId) {
   const summary = getSummary();
 
   return Object.keys(summary).reduce((acc, key) => {
     const curr = summary[key];
-    if (curr.topicId === topicId)
+    if (curr.topicId === topicId) {
+      const desiredValue = curr.desiredImprovementValue
+        ? getDesiredImprovementNumericValueById(curr.desiredImprovementValue)
+        : undefined;
+      if (curr.desiredImprovementValue && desiredValue === undefined) {
+        throw new Error(
+          `Unknown desired improvement: ${curr.desiredImprovementValue}`
+        );
+      }
       acc.push({
         slideId: curr.slideId,
         topicName: curr.topicName,
         answer: curr.answer,
-        // TODO: hack, will fix later
-        // Explanation:
-        // current desiredImprovements map is "tied" to the <Slider /> needs (it's in LTR style)
-        // while value for DB should be inverted. THe question is where it's better to invert and do it in 
-        // a single source of truth way. Leaving for now as a patch.
-        desired_answer: invertDesiredAnswer(getDesiredImprovementNumericValueById(curr.desiredImprovementValue)) ?? '-',
+        desired_answer: desiredValue === undefined ? "-" : 6 - desiredValue,
         title: curr.slideTitle,
         subtitle: curr.slideSubtitle,
       });
+    }
     return acc;
   }, []);
 }
@@ -822,7 +822,7 @@ export function getDesiredImprovementsIdMap() {
     }, {});
 }
 
-export function getDesiredImprovementNumericValueById(id: number): number | undefined {
+export function getDesiredImprovementNumericValueById(id: string): number | undefined {
   const desiredImprovementsMap = getDesiredImprovementsIdMap();
   const value = Object.keys(desiredImprovementsMap).find(key => desiredImprovementsMap[key] === id);
   console.log('given numeric desired improvement value: ', id, ' value is ', value, ' map: ', desiredImprovementsMap)
