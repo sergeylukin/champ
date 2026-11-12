@@ -265,9 +265,9 @@ export function Player() {
                 <CardContent className="flex-column">
                   <div className="grid gap-6 mt-[-1em] grid-cols-2">
                     <div>
-                      <figure className="flex-row justify-start">
+                      <figure className="h-[320px] w-full">
                         <img
-                          className="aspect-square"
+                          className="h-full w-full object-contain"
                           src={
                             resetImages
                               ? `https://ratee.pockethost.io/api/files/m8ih3udzcgmwlaj/2aeudphns9aug9r/fff_AjkycInW6S.png?token=`
